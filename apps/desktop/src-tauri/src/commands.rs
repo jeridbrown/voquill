@@ -521,6 +521,7 @@ pub async fn tone_upsert(
     {
         let updated = crate::domain::Tone {
             created_at: existing.created_at,
+            is_system: existing.is_system,
             ..tone.clone()
         };
 
@@ -580,22 +581,35 @@ pub async fn clear_local_data(
     let pool = database.pool();
     let mut transaction = pool.begin().await.map_err(|err| err.to_string())?;
 
-    const TABLES_TO_CLEAR: [&str; 6] = [
-        "user_profiles",
-        "transcriptions",
-        "terms",
-        "hotkeys",
-        "api_keys",
-        "user_preferences",
-    ];
+    sqlx::query("DELETE FROM user_profiles")
+        .execute(&mut *transaction)
+        .await
+        .map_err(|err| err.to_string())?;
 
-    for table in TABLES_TO_CLEAR {
-        let statement = format!("DELETE FROM {table}");
-        sqlx::query(&statement)
-            .execute(&mut *transaction)
-            .await
-            .map_err(|err| err.to_string())?;
-    }
+    sqlx::query("DELETE FROM transcriptions")
+        .execute(&mut *transaction)
+        .await
+        .map_err(|err| err.to_string())?;
+
+    sqlx::query("DELETE FROM terms")
+        .execute(&mut *transaction)
+        .await
+        .map_err(|err| err.to_string())?;
+
+    sqlx::query("DELETE FROM hotkeys")
+        .execute(&mut *transaction)
+        .await
+        .map_err(|err| err.to_string())?;
+
+    sqlx::query("DELETE FROM api_keys")
+        .execute(&mut *transaction)
+        .await
+        .map_err(|err| err.to_string())?;
+
+    sqlx::query("DELETE FROM user_preferences")
+        .execute(&mut *transaction)
+        .await
+        .map_err(|err| err.to_string())?;
 
     transaction.commit().await.map_err(|err| err.to_string())?;
 

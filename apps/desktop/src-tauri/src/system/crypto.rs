@@ -1,5 +1,8 @@
 use base64::{engine::general_purpose, Engine as _};
-use rand::{rngs::OsRng, RngCore};
+use chacha20poly1305::{
+    aead::{Aead, KeyInit, OsRng},
+    ChaCha20Poly1305, Nonce,
+};
 use sha2::{Digest, Sha256};
 use std::sync::OnceLock;
 
@@ -7,6 +10,9 @@ const SECRET_ENV: &str = "VOQUILL_API_KEY_SECRET";
 const DEFAULT_SECRET: &str = "voquill-default-secret";
 static RUNTIME_SECRET: OnceLock<Vec<u8>> = OnceLock::new();
 static LOGGED_FALLBACK: OnceLock<()> = OnceLock::new();
+
+const SALT_SIZE: usize = 16;
+const NONCE_SIZE: usize = 12;
 
 pub struct ProtectedApiKey {
     pub salt_b64: String,
@@ -54,8 +60,13 @@ pub fn reveal_api_key(salt_b64: &str, ciphertext_b64: &str) -> Result<String, Cr
     let ciphertext = general_purpose::STANDARD
         .decode(ciphertext_b64)
         .map_err(|err| CryptoError::Base64(err.to_string()))?;
+
+    if salt.len() != SALT_SIZE {
+        return Err(CryptoError::InvalidData("Invalid salt length".to_string()));
+    }
+
     let secret = runtime_secret();
-    let plaintext = decrypt_key(secret, &salt, &ciphertext);
+    let plaintext = decrypt_key(secret, &salt, &ciphertext)?;
     String::from_utf8(plaintext).map_err(|err| CryptoError::InvalidUtf8(err.to_string()))
 }
 
@@ -65,10 +76,14 @@ pub enum CryptoError {
     Base64(String),
     #[error("stored API key is not valid UTF-8: {0}")]
     InvalidUtf8(String),
+    #[error("decryption failed: {0}")]
+    DecryptionFailed(String),
+    #[error("invalid data: {0}")]
+    InvalidData(String),
 }
 
-fn generate_salt() -> [u8; 16] {
-    let mut salt = [0u8; 16];
+fn generate_salt() -> [u8; SALT_SIZE] {
+    let mut salt = [0u8; SALT_SIZE];
     OsRng.fill_bytes(&mut salt);
     salt
 }
@@ -81,38 +96,48 @@ fn hash_key(secret: &[u8], salt: &[u8], key: &[u8]) -> [u8; 32] {
     hasher.finalize().into()
 }
 
-fn encrypt_key(secret: &[u8], salt: &[u8], key: &[u8]) -> Vec<u8> {
-    xor_keystream(secret, salt, key)
+fn derive_encryption_key(secret: &[u8], salt: &[u8]) -> [u8; 32] {
+    let mut hasher = Sha256::new();
+    hasher.update(b"voquill-encryption-key-v1");
+    hasher.update(secret);
+    hasher.update(salt);
+    hasher.finalize().into()
 }
 
-fn decrypt_key(secret: &[u8], salt: &[u8], ciphertext: &[u8]) -> Vec<u8> {
-    xor_keystream(secret, salt, ciphertext)
+fn encrypt_key(secret: &[u8], salt: &[u8], plaintext: &[u8]) -> Vec<u8> {
+    let encryption_key = derive_encryption_key(secret, salt);
+    let cipher = ChaCha20Poly1305::new(&encryption_key.into());
+
+    let mut nonce_bytes = [0u8; NONCE_SIZE];
+    OsRng.fill_bytes(&mut nonce_bytes);
+    let nonce = Nonce::from_slice(&nonce_bytes);
+
+    let ciphertext = cipher
+        .encrypt(nonce, plaintext)
+        .expect("encryption should not fail");
+
+    let mut result = Vec::with_capacity(NONCE_SIZE + ciphertext.len());
+    result.extend_from_slice(&nonce_bytes);
+    result.extend_from_slice(&ciphertext);
+    result
 }
 
-fn xor_keystream(secret: &[u8], salt: &[u8], data: &[u8]) -> Vec<u8> {
-    let keystream = derive_keystream(secret, salt, data.len());
-    data.iter()
-        .zip(keystream.iter())
-        .map(|(byte, key_byte)| byte ^ key_byte)
-        .collect()
-}
-
-fn derive_keystream(secret: &[u8], salt: &[u8], length: usize) -> Vec<u8> {
-    let mut keystream = Vec::with_capacity(length);
-    let mut counter: u32 = 0;
-
-    while keystream.len() < length {
-        let mut hasher = Sha256::new();
-        hasher.update(secret);
-        hasher.update(salt);
-        hasher.update(counter.to_be_bytes());
-        let block = hasher.finalize();
-        keystream.extend_from_slice(&block);
-        counter = counter.wrapping_add(1);
+fn decrypt_key(secret: &[u8], salt: &[u8], data: &[u8]) -> Result<Vec<u8>, CryptoError> {
+    if data.len() < NONCE_SIZE {
+        return Err(CryptoError::InvalidData(
+            "Ciphertext too short".to_string(),
+        ));
     }
 
-    keystream.truncate(length);
-    keystream
+    let (nonce_bytes, ciphertext) = data.split_at(NONCE_SIZE);
+    let nonce = Nonce::from_slice(nonce_bytes);
+
+    let encryption_key = derive_encryption_key(secret, salt);
+    let cipher = ChaCha20Poly1305::new(&encryption_key.into());
+
+    cipher
+        .decrypt(nonce, ciphertext)
+        .map_err(|err| CryptoError::DecryptionFailed(err.to_string()))
 }
 
 fn compute_key_suffix(key: &str) -> Option<String> {
