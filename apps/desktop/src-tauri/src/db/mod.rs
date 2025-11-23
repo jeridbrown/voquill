@@ -171,6 +171,10 @@ pub fn migrations() -> Vec<tauri_plugin_sql::Migration> {
             sql: APP_TARGETS_MIGRATION_SQL,
             kind: tauri_plugin_sql::MigrationKind::Up,
         },
+        // Note: Migration version 21 uses file 020_app_target_tone_id.sql.
+        // There is no file 021_*.sql - the file numbering and version numbering
+        // diverged during development. This is intentional and doesn't affect
+        // migration execution (versions are what matter, not file numbers).
         tauri_plugin_sql::Migration {
             version: 21,
             description: "add_app_target_tone_id",
