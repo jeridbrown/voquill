@@ -1,5 +1,5 @@
 import {
-  RocketLaunch,
+  Rocket,
   Mic,
   Volume2,
   Keyboard,
@@ -15,7 +15,7 @@ import {
   UserMinus,
   ExternalLink,
 } from "lucide-react";
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { invokeHandler } from "@repo/functions";
 import { openUrl } from "@tauri-apps/plugin-opener";
@@ -153,7 +153,7 @@ export default function SettingsPage() {
     <Section title={<FormattedMessage defaultMessage="General" />}>
       <ListTile
         title={<FormattedMessage defaultMessage="Start on system startup" />}
-        leading={<RocketLaunch className="h-5 w-5" />}
+        leading={<Rocket className="h-5 w-5" />}
         trailing={
           <Switch
             checked={autoLaunchEnabled}

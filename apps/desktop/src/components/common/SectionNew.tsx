@@ -73,9 +73,11 @@ export const Section = ({
             </span>
           </TooltipTrigger>
           <TooltipContent>
-            {blockedReason || (
-              <FormattedMessage defaultMessage="This setting is not available." />
-            )}
+            <>
+              {blockedReason ?? (
+                <FormattedMessage defaultMessage="This setting is not available." />
+              )}
+            </>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

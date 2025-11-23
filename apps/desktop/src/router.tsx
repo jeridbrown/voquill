@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import SettingsPage from "./components/settings/SettingsPage.tsx";
+import SettingsPage from "./components/settings/SettingsPageNew.tsx";
 import { PageLayout } from "./components/common/PageLayout.tsx";
 import HomePage from "./components/home/HomePage.tsx";
 import OnboardingPage from "./components/onboarding/OnboardingPage.tsx";
