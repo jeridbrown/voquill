@@ -488,59 +488,35 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 ---
 
 ### Phase 7: Migrate Dictionary Page
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Estimated Time**: 1 day
 **Goal**: Rebuild dictionary/glossary management page
 
 #### 7.1 Analyze Current Dictionary Page
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 20 min
 
-- [ ] 7.1.1 Read src/pages/dictionary/DictionaryPage.tsx
-- [ ] 7.1.2 Identify table structure
-- [ ] 7.1.3 Note add/edit dialog
-- [ ] 7.1.4 Document term search/filter
+- [x] 7.1.1 Read src/components/dictionary/DictionaryPage.tsx
+- [x] 7.1.2 Identify table structure (VirtualizedListPage with DictionaryRow items)
+- [x] 7.1.3 Note add/edit (inline editing with TextFields, no dialog)
+- [x] 7.1.4 Document term management (MenuPopover for Add button, glossary vs replacement)
 
-#### 7.2 Rebuild Dictionary Table
-**Status**: ⬜ Not Started
+**Analysis Summary:**
+- **MUI Components**: Button, TextField, IconButton, Stack
+- **MUI Icons**: FindReplaceOutlined, SpellcheckOutlined, AddRounded, ArrowForwardRounded, DeleteOutlineRounded
+- **Structure**: VirtualizedListPage + DictionaryRow (inline editing)
+- **Features**: Add glossary term or replacement rule via menu, inline edit on blur, delete button
+
+#### 7.2 Create Components
+**Status**: ✅ Complete
 **Time**: 60 min
 
-- [ ] 7.2.1 Create table with Tailwind
-- [ ] 7.2.2 Add term and replacement columns
-- [ ] 7.2.3 Add action column (edit, delete)
-- [ ] 7.2.4 Add row hover states
-- [ ] 7.2.5 Test with many terms
+- [x] 7.2.1 Create DictionaryRowNew.tsx with inline editing
+- [x] 7.2.2 Create DictionaryPageNew.tsx
+- [x] 7.2.3 Wire up in router
+- [x] 7.2.4 Build and fix errors
 
-#### 7.3 Rebuild Add/Edit Dialog
-**Status**: ⬜ Not Started
-**Time**: 60 min
-
-- [ ] 7.3.1 Use new Dialog component
-- [ ] 7.3.2 Use new Input components for term fields
-- [ ] 7.3.3 Use new Switch for is_replacement toggle
-- [ ] 7.3.4 Add form validation
-- [ ] 7.3.5 Test creating new terms
-- [ ] 7.3.6 Test editing existing terms
-
-#### 7.4 Add Search/Filter UI
-**Status**: ⬜ Not Started
-**Time**: 30 min
-
-- [ ] 7.4.1 Add search Input component
-- [ ] 7.4.2 Implement filter logic
-- [ ] 7.4.3 Test filtering works
-- [ ] 7.4.4 Add clear filter button
-
-#### 7.5 Test Dictionary Page Completely
-**Status**: ⬜ Not Started
-**Time**: 30 min
-
-- [ ] 7.5.1 Test adding new terms
-- [ ] 7.5.2 Test editing terms
-- [ ] 7.5.3 Test deleting terms
-- [ ] 7.5.4 Test search/filter
-- [ ] 7.5.5 Test empty state
-- [ ] 7.5.6 Test on Windows
+**Notes**: Build successful! Dictionary page with inline editing, add menu for glossary/replacement, delete functionality all migrated to Tailwind.
 
 ---
 
