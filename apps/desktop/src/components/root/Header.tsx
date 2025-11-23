@@ -21,7 +21,7 @@ import { LogoWithText } from "../common/LogoWithText";
 import {
   MenuPopoverBuilder,
   type MenuPopoverItem,
-} from "../common/MenuPopover";
+} from "../common/MenuPopoverNew";
 import { maybeArrayElements } from "../settings/AIPostProcessingConfiguration";
 
 export type BaseHeaderProps = {
@@ -99,8 +99,6 @@ export const AppHeader = () => {
   if (isOnboarded) {
     rightContent = (
       <MenuPopoverBuilder
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
         items={sharedRightMenuItems}
       >
         {({ ref, open }) => (

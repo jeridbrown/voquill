@@ -8,7 +8,7 @@ import {
 import { Box, List, Stack } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ListTile } from "../common/ListTile";
+import { ListTile } from "../common/ListTileNew";
 
 const settingsPath = "/dashboard/settings";
 

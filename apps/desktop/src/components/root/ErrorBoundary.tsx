@@ -1,12 +1,12 @@
-import { Button, Stack, Typography } from "@mui/material";
 import {
   isRouteErrorResponse,
   useNavigate,
   useRouteError,
 } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
-import { PageLayout } from "../common/PageLayout";
+import { PageLayout } from "../common/PageLayoutNew";
 import { AppHeader } from "./Header";
+import { Button } from "../ui/button";
 
 const ErrorContent = () => {
   const error = useRouteError();
@@ -14,28 +14,28 @@ const ErrorContent = () => {
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {
       return (
-        <Typography variant="h4">
+        <h1 className="text-2xl font-semibold">
           <FormattedMessage defaultMessage="404 - page not found" />
-        </Typography>
+        </h1>
       );
     }
 
     return (
       <>
-        <Typography variant="h4">
+        <h1 className="text-2xl font-semibold">
           {error.status} - {error.statusText}
-        </Typography>
-        <Typography>{error.data?.message}</Typography>
+        </h1>
+        <p className="text-base">{error.data?.message}</p>
       </>
     );
   }
 
   return (
     <>
-      <Typography variant="h4">
+      <h1 className="text-2xl font-semibold">
         <FormattedMessage defaultMessage="Something went wrong." />
-      </Typography>
-      <Typography>{(error as Error).message}</Typography>
+      </h1>
+      <p className="text-base">{(error as Error).message}</p>
     </>
   );
 };
@@ -49,24 +49,14 @@ export default function ErrorBoundary() {
 
   return (
     <PageLayout header={<AppHeader />}>
-      <Stack
-        sx={{
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          pb: 16,
-        }}
-        spacing={2}
-      >
-        <Stack sx={{ maxWidth: 800 }} spacing={3} alignItems="center">
+      <div className="w-full h-full flex justify-center items-center text-center pb-32">
+        <div className="max-w-2xl flex flex-col gap-6 items-center">
           <ErrorContent />
-          <Button variant="contained" onClick={handleGoHome}>
+          <Button variant="default" onClick={handleGoHome}>
             <FormattedMessage defaultMessage="Return home" />
           </Button>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
     </PageLayout>
   );
 }

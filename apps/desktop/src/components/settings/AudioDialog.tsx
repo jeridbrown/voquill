@@ -11,7 +11,7 @@ import { FormattedMessage } from "react-intl";
 import { setInteractionChimeEnabled } from "../../actions/user.actions";
 import { produceAppState, useAppStore } from "../../store";
 import { getMyUser } from "../../utils/user.utils";
-import { SettingSection } from "../common/SettingSection";
+import { SettingSection } from "../common/SettingSectionNew";
 
 export const AudioDialog = () => {
   const [open, playInteractionChime] = useAppStore((state) => {

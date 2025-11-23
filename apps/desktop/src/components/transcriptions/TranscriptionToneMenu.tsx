@@ -2,11 +2,11 @@ import { FormattedMessage } from "react-intl";
 import { useMemo, useCallback } from "react";
 import type { Tone } from "@repo/types";
 import { getRec } from "@repo/utilities";
-import { MenuPopoverBuilder } from "../common/MenuPopover";
+import { MenuPopoverBuilder } from "../common/MenuPopoverNew";
 import type {
   MenuPopoverItem,
   MenuPopoverBuilderArgs,
-} from "../common/MenuPopover";
+} from "../common/MenuPopoverNew";
 import { useAppStore } from "../../store";
 import { getMyUserPreferences } from "../../utils/user.utils";
 
@@ -82,7 +82,6 @@ export const TranscriptionToneMenu = ({
   return (
     <MenuPopoverBuilder
       items={items}
-      sx={{ maxHeight: 300, overflowY: "auto" }}
     >
       {(args) => children(args)}
     </MenuPopoverBuilder>

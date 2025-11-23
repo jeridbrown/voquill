@@ -26,7 +26,7 @@ import { setPreferredMicrophone } from "../../actions/user.actions";
 import { useMyUser } from "../../hooks/user.hooks";
 import { produceAppState, useAppStore } from "../../store";
 import { AudioWaveform } from "../common/AudioWaveform";
-import { SettingSection } from "../common/SettingSection";
+import { SettingSection } from "../common/SettingSectionNew";
 import { buildWaveFile, ensureFloat32Array } from "../../utils/audio.utils";
 
 const AUTO_OPTION_VALUE = "__microphone_auto__";
@@ -397,7 +397,6 @@ export const MicrophoneDialog = () => {
             <SettingSection
               title={<FormattedMessage defaultMessage="Preferred microphone" />}
               description={<FormattedMessage defaultMessage="Choose which microphone Voquill should use when recording. Automatic picks the best available device each time." />}
-              sx={{ pb: 0.5 }}
             />
             <FormControl fullWidth size="small" disabled={loadingDevices}>
               <InputLabel id="microphone-select-label">

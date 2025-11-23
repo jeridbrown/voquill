@@ -1,6 +1,6 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import SettingsPage from "./components/settings/SettingsPageNew.tsx";
-import { PageLayout } from "./components/common/PageLayout.tsx";
+import { PageLayout } from "./components/common/PageLayoutNew.tsx";
 import HomePage from "./components/home/HomePageNew.tsx";
 import OnboardingPage from "./components/onboarding/OnboardingPage.tsx";
 import ErrorBoundary from "./components/root/ErrorBoundary.tsx";
