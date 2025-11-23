@@ -565,62 +565,72 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 ---
 
 ### Phase 10: Cleanup & Remove MUI
-**Status**: ⬜ Not Started
+**Status**: 🔄 Partially Complete (cleanup done, MUI removal deferred)
 **Estimated Time**: 1 day
 **Goal**: Remove all MUI dependencies and clean up code
 
 #### 10.1 Remove MUI Dependencies
-**Status**: ⬜ Not Started
+**Status**: ⏭️ Deferred (onboarding/login/pricing/dialogs still use MUI)
 **Time**: 20 min
 
-- [ ] 10.1.1 Remove @mui/material from package.json
-- [ ] 10.1.2 Remove @mui/icons-material from package.json
-- [ ] 10.1.3 Remove @mui/lab from package.json
-- [ ] 10.1.4 Remove @emotion/react from package.json
-- [ ] 10.1.5 Remove @emotion/styled from package.json
-- [ ] 10.1.6 Run npm uninstall for all MUI packages
-- [ ] 10.1.7 Run npm install to update lock file
+- [ ] 10.1.1 Remove @mui/material from package.json (DEFERRED)
+- [ ] 10.1.2 Remove @mui/icons-material from package.json (DEFERRED)
+- [ ] 10.1.3 Remove @mui/lab from package.json (DEFERRED)
+- [ ] 10.1.4 Remove @emotion/react from package.json (DEFERRED)
+- [ ] 10.1.5 Remove @emotion/styled from package.json (DEFERRED)
+- [ ] 10.1.6 Run npm uninstall for all MUI packages (DEFERRED)
+- [ ] 10.1.7 Run npm install to update lock file (DEFERRED)
+
+**Notes**: Still 20 files with MUI imports (onboarding, login, pricing, settings dialogs, overlay, dashboard menu). These were not in scope for the main dashboard page migrations.
 
 #### 10.2 Remove MUI Imports & Theme
-**Status**: ⬜ Not Started
+**Status**: ⏭️ Deferred
 **Time**: 45 min
 
-- [ ] 10.2.1 Search codebase for remaining MUI imports
-- [ ] 10.2.2 Remove ThemeProvider from App.tsx
-- [ ] 10.2.3 Remove theme.ts file
-- [ ] 10.2.4 Remove any MUI-specific CSS files
-- [ ] 10.2.5 Search for '@mui' string across codebase
-- [ ] 10.2.6 Search for '@emotion' string across codebase
-- [ ] 10.2.7 Fix any remaining references
+- [x] 10.2.1 Search codebase for remaining MUI imports (32 occurrences in 20 files)
+- [ ] 10.2.2 Remove ThemeProvider from main.tsx (DEFERRED - still needed)
+- [ ] 10.2.3 Remove theme.ts file (DEFERRED - still needed)
+- [ ] 10.2.4 Remove any MUI-specific CSS files (none found)
+- [x] 10.2.5 Search for '@mui' string across codebase (found 20 files)
+- [x] 10.2.6 Search for '@emotion' string across codebase (none found)
+- [ ] 10.2.7 Fix any remaining references (DEFERRED)
+
+**Notes**: ThemeProvider and theme.ts still needed for onboarding/login/pricing/dialogs.
 
 #### 10.3 Clean Up Unused Components
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 30 min
 
-- [ ] 10.3.1 Remove old MUI-based common components
-- [ ] 10.3.2 Remove any duplicate layout components
-- [ ] 10.3.3 Remove unused utility files
-- [ ] 10.3.4 Clean up imports in remaining files
+- [x] 10.3.1 Remove old MUI-based common components (deleted 17 component files)
+- [x] 10.3.2 Remove any duplicate layout components (deleted PageLayout, DashboardEntryLayout, etc.)
+- [x] 10.3.3 Remove unused utility files (deleted AppWrapper)
+- [x] 10.3.4 Clean up imports in remaining files (updated 8 files to use "New" imports)
+
+**Notes**: Removed 3,314 lines of code by deleting old MUI component files!
 
 #### 10.4 Verify Build & Bundle
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 30 min
 
-- [ ] 10.4.1 Run npm run build
-- [ ] 10.4.2 Check for any build errors
+- [x] 10.4.1 Run npm run build (successful in 22.14s)
+- [x] 10.4.2 Check for any build errors (none!)
 - [ ] 10.4.3 Run bundle analyzer if available
 - [ ] 10.4.4 Verify bundle size reduction (target >30%)
-- [ ] 10.4.5 Check for any MUI in bundle
+- [x] 10.4.5 Check for any MUI in bundle (yes, still present - needed for unmigrated pages)
+
+**Notes**: Build successful. Bundle is 1,737.54 kB (CSS 71.16 kB). MUI still in bundle due to unmigrated pages.
 
 #### 10.5 Clean Up CSS Files
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 30 min
 
-- [ ] 10.5.1 Review src/index.css
-- [ ] 10.5.2 Remove any MUI-specific styles
-- [ ] 10.5.3 Remove unused CSS files
-- [ ] 10.5.4 Organize remaining styles
-- [ ] 10.5.5 Add any missing Tailwind utilities
+- [x] 10.5.1 Review src/index.css (clean - only Tailwind + CSS variables)
+- [x] 10.5.2 Remove any MUI-specific styles (none found)
+- [x] 10.5.3 Remove unused CSS files (none to remove)
+- [x] 10.5.4 Organize remaining styles (already organized)
+- [x] 10.5.5 Add any missing Tailwind utilities (none needed)
+
+**Notes**: CSS is clean! Only Tailwind directives and CSS variables for theming.
 
 ---
 
