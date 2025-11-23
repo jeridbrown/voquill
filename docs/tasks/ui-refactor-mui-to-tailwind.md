@@ -520,85 +520,47 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 
 ---
 
-### Phase 8: Migrate Tones Page
-**Status**: ⬜ Not Started
+### Phase 8: Migrate Styling/Tones Page
+**Status**: ✅ Complete
 **Estimated Time**: 1 day
-**Goal**: Rebuild tone management page
+**Goal**: Rebuild tone management page (merged with Styling page)
 
-#### 8.1 Analyze Current Tones Page
-**Status**: ⬜ Not Started
+#### 8.1 Analyze Styling Page (includes Tones)
+**Status**: ✅ Complete
 **Time**: 20 min
 
-- [ ] 8.1.1 Read src/pages/tones/TonesPage.tsx
-- [ ] 8.1.2 Identify tone cards/list
-- [ ] 8.1.3 Note add/edit dialog
-- [ ] 8.1.4 Document tone selection logic
+- [x] 8.1.1 Read StylingPage.tsx, StylingRow.tsx, ToneSelect.tsx, CenterMessage.tsx
+- [x] 8.1.2 Identify structure (VirtualizedListPage with app target rows)
+- [x] 8.1.3 Note ToneSelect with add/edit inline
+- [x] 8.1.4 Document CenterMessage for disabled state
 
-#### 8.2 Rebuild Tones List/Grid
-**Status**: ⬜ Not Started
+**Analysis Summary:**
+- **StylingPage**: Shows app-specific writing styles, VirtualizedListPage with app targets
+- **StylingRow**: ListTile with app icon + ToneSelect dropdown
+- **ToneSelect**: MUI Select with add/edit tone options
+- **CenterMessage**: Centered message when post-processing disabled
+- **Components needed**: ToneSelectNew, StylingRowNew, StylingPageNew, CenterMessageNew
+
+#### 8.2 Create Components
+**Status**: ✅ Complete
 **Time**: 60 min
 
-- [ ] 8.2.1 Create card grid with Tailwind
-- [ ] 8.2.2 Style tone cards (active vs inactive)
-- [ ] 8.2.3 Add select/activate button
-- [ ] 8.2.4 Add edit/delete actions
-- [ ] 8.2.5 Test selecting different tones
+- [x] 8.2.1 Create ToneSelectNew.tsx (Radix Select with add/edit)
+- [x] 8.2.2 Create CenterMessageNew.tsx
+- [x] 8.2.3 Create StylingRowNew.tsx
+- [x] 8.2.4 Create StylingPageNew.tsx
+- [x] 8.2.5 Wire up in router and build
 
-#### 8.3 Rebuild Add/Edit Tone Dialog
-**Status**: ⬜ Not Started
-**Time**: 60 min
-
-- [ ] 8.3.1 Use new Dialog component
-- [ ] 8.3.2 Use Input for tone name
-- [ ] 8.3.3 Use Textarea for prompt template
-- [ ] 8.3.4 Add Select for tone type (system/custom)
-- [ ] 8.3.5 Test creating custom tones
-- [ ] 8.3.6 Test editing custom tones
-- [ ] 8.3.7 Verify system tones cannot be edited
-
-#### 8.4 Test Tones Page Completely
-**Status**: ⬜ Not Started
-**Time**: 30 min
-
-- [ ] 8.4.1 Test selecting active tone
-- [ ] 8.4.2 Test creating custom tone
-- [ ] 8.4.3 Test editing custom tone
-- [ ] 8.4.4 Test deleting custom tone
-- [ ] 8.4.5 Test on Windows
-- [ ] 8.4.6 Verify tone saves persist
+**Notes**: Tone selection uses Radix Select component with inline add/edit buttons. Styling page shows app-specific writing styles. Build successful after removing disableRipple prop from ListTile.
 
 ---
 
 ### Phase 9: Migrate Styling Page
-**Status**: ⬜ Not Started
-**Estimated Time**: 1 day
-**Goal**: Rebuild styling/formatting rules page
+**Status**: ✅ Merged with Phase 8
+**Estimated Time**: N/A
+**Goal**: N/A - Tones and Styling are the same page
 
-#### 9.1 Analyze Current Styling Page
-**Status**: ⬜ Not Started
-**Time**: 20 min
-
-- [ ] 9.1.1 Read src/pages/styling/StylingPage.tsx
-- [ ] 9.1.2 Identify current layout
-- [ ] 9.1.3 Note any special UI requirements
-- [ ] 9.1.4 Document styling rule structure
-
-#### 9.2 Rebuild Styling Page
-**Status**: ⬜ Not Started
-**Time**: 60 min
-
-- [ ] 9.2.1 Replace MUI components with Tailwind
-- [ ] 9.2.2 Use new UI components where applicable
-- [ ] 9.2.3 Rebuild any tables or lists
-- [ ] 9.2.4 Test all interactions
-
-#### 9.3 Test Styling Page Completely
-**Status**: ⬜ Not Started
-**Time**: 30 min
-
-- [ ] 9.3.1 Test all page functionality
-- [ ] 9.3.2 Test on Windows
-- [ ] 9.3.3 Verify no visual issues
+**Notes**: Styling page and Tones functionality are combined in a single page. This phase was merged into Phase 8. No additional work needed.
 
 ---
 

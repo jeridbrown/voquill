@@ -11,7 +11,7 @@ import { Redirect } from "./components/routing/Redirectors.tsx";
 import DashboardPage from "./components/dashboard/DashboardPage.tsx";
 import TranscriptionsPage from "./components/transcriptions/TranscriptionsPageNew.tsx";
 import DictionaryPage from "./components/dictionary/DictionaryPageNew.tsx";
-import StylingPage from "./components/styling/StylingPage.tsx";
+import StylingPage from "./components/styling/StylingPageNew.tsx";
 
 const AppWrapper = () => {
   return (
