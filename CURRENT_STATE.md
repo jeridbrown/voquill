@@ -20,6 +20,14 @@
 
 ## Recent Changes
 
+### 2025-11-22: Mandatory PRD Workflow Policy Established ✅
+- ✅ **Policy**: Multi-file changes REQUIRE PRD + task list (no exceptions)
+- ✅ **CLAUDE.md**: Added workflow requirement as critical policy
+- ✅ **Documentation**: Updated PRD and task READMEs with mandatory notice
+- ✅ **Enforcement**: AI assistants must ask permission for single-file changes
+
+**Impact**: All future work will be properly documented with clear requirements
+
 ### 2025-11-22: Documentation Workflow Established ✅
 - ✅ **PRD System**: Created docs/prds/ with README template
 - ✅ **Task Tracking**: Created docs/tasks/ with real-time update guidelines
