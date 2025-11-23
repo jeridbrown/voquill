@@ -13,12 +13,22 @@
 
 ### Current Focus
 - **Phase**: **Bug Fixes & Pre-Deployment**
-- **Status**: In progress - 3 of 5 issues complete (60%)
-- **Next Steps**: #3 (migration doc), #5 (console cleanup), or #6 (testing)
+- **Status**: In progress - 4 of 5 issues complete (80%)
+- **Next Steps**: #5 (console cleanup - requires PRD) or #6 (testing checklist)
 
 ---
 
 ## Recent Changes
+
+### 2025-11-22: Document Missing Migration #21 - Issue #3 Complete ✅
+- ✅ **Documentation**: Added comment explaining migration file/version numbering gap
+- ✅ **Clarity**: Explained that file 020 is used for version 21 (intentional)
+- ✅ **No Impact**: Migration execution uses versions, not file numbers
+
+**Issue**: #3 (closed)
+**Commit**: 3505865
+**Files Modified**: `apps/desktop/src-tauri/src/db/mod.rs`
+**Method**: Single-file fix (user permission granted to skip PRD)
 
 ### 2025-11-22: Fix Windows Build Failure - Issue #2 Complete ✅
 - ✅ **Build Fix**: Resolved Windows path spaces causing 'C:\Program' error
