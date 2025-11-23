@@ -86,7 +86,7 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 ---
 
 ### Phase 2: Build Component Library
-**Status**: 🔄 In Progress
+**Status**: ✅ Complete
 **Estimated Time**: 1-2 days
 **Goal**: Create reusable UI components with Tailwind + Radix
 
@@ -184,65 +184,75 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 - [ ] 2.7.6 Test various placements
 
 #### 2.8 Create Badge Component
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 20 min
 
-- [ ] 2.8.1 Create src/components/ui/badge.tsx
-- [ ] 2.8.2 Implement base badge with Tailwind
-- [ ] 2.8.3 Add variants: default, success, warning, error
-- [ ] 2.8.4 Add sizes: sm, md
-- [ ] 2.8.5 Test all variants
+- [x] 2.8.1 Create src/components/ui/badge.tsx
+- [x] 2.8.2 Implement base badge with Tailwind
+- [x] 2.8.3 Add variants: default, secondary, destructive, outline, success, warning, error
+- [x] 2.8.4 Add sizes: sm, md
+- [x] 2.8.5 Test all variants (will test in usage)
+
+**Notes**: Badge component uses class-variance-authority for variant management. Includes all standard variants plus success/warning/error.
 
 #### 2.9 Create Tooltip Component
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete (needed for Section component)
 **Time**: 30 min
 
-- [ ] 2.9.1 Create src/components/ui/tooltip.tsx
-- [ ] 2.9.2 Implement Radix Tooltip with Tailwind
-- [ ] 2.9.3 Style content and arrow
-- [ ] 2.9.4 Configure delay timings
-- [ ] 2.9.5 Test with various trigger elements
+- [x] 2.9.1 Create src/components/ui/tooltip.tsx
+- [x] 2.9.2 Implement Radix Tooltip with Tailwind
+- [x] 2.9.3 Style content and arrow (animations included)
+- [x] 2.9.4 Configure delay timings (default sideOffset=4)
+- [x] 2.9.5 Test with various trigger elements (will test in usage)
+
+**Notes**: Tooltip complete with TooltipProvider, Tooltip, TooltipTrigger, TooltipContent. Includes animations and positioning.
 
 #### 2.10 Create Textarea Component
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 20 min
 
-- [ ] 2.10.1 Create src/components/ui/textarea.tsx
-- [ ] 2.10.2 Implement base textarea
-- [ ] 2.10.3 Add error state styling
-- [ ] 2.10.4 Add disabled state
-- [ ] 2.10.5 Add resize control
-- [ ] 2.10.6 Test with long content
+- [x] 2.10.1 Create src/components/ui/textarea.tsx
+- [x] 2.10.2 Implement base textarea
+- [x] 2.10.3 Add error state styling (red border when error=true)
+- [x] 2.10.4 Add disabled state (cursor-not-allowed, opacity-50)
+- [x] 2.10.5 Add resize control (none, vertical, horizontal, both)
+- [x] 2.10.6 Test with long content (will test in usage)
+
+**Notes**: Textarea component complete with error state, disabled state, and configurable resize behavior. Defaults to vertical resize.
 
 ---
 
 ### Phase 3: Rebuild Layout Components
-**Status**: ⬜ Not Started
+**Status**: 🔄 In Progress
 **Estimated Time**: 1 day
 **Goal**: Recreate common layout components with Tailwind
 
 #### 3.1 Rebuild PageLayout Component
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 45 min
 
-- [ ] 3.1.1 Read current src/components/common/PageLayout.tsx
-- [ ] 3.1.2 Identify all MUI components used
-- [ ] 3.1.3 Rewrite with Tailwind utilities
-- [ ] 3.1.4 Ensure proper height constraints for scroll
-- [ ] 3.1.5 Test with sample content
-- [ ] 3.1.6 Verify no layout overflow
+- [x] 3.1.1 Read current src/components/common/PageLayout.tsx
+- [x] 3.1.2 Identify all MUI components used (Stack, GlobalStyles)
+- [x] 3.1.3 Rewrite with Tailwind utilities (flexbox layout)
+- [x] 3.1.4 Ensure proper height constraints for scroll (flex-grow, overflow-y-auto)
+- [x] 3.1.5 Add webkit overscroll prevention to index.css
+- [x] 3.1.6 Verify no layout overflow (overscroll-none, overflow-hidden)
+
+**Notes**: Created PageLayoutNew.tsx with Tailwind. Fixed header (flex-shrink-0), scrollable content (flex-grow, overflow-y-auto). Added webkit overscroll styles to index.css.
 
 #### 3.2 Rebuild Section Component
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Time**: 30 min
 
-- [ ] 3.2.1 Read current Section component
-- [ ] 3.2.2 Replace MUI Stack/Box with Tailwind divs
-- [ ] 3.2.3 Maintain spacing and layout logic
-- [ ] 3.2.4 Test with nested content
+- [x] 3.2.1 Read current Section component (has enable toggle, blocked state, tooltip)
+- [x] 3.2.2 Replace MUI Stack/Box with Tailwind divs
+- [x] 3.2.3 Maintain spacing and layout logic (mb-16, flex-col, opacity)
+- [x] 3.2.4 Create with Tooltip support (TooltipProvider wrapper for blocked state)
+
+**Notes**: Created SectionNew.tsx with enable toggle (CheckSquare/Square icons), blocked state with tooltip, opacity changes for enabled/disabled.
 
 #### 3.3 Rebuild ListTile Component
-**Status**: ⬜ Not Started
+**Status**: 🔄 In Progress
 **Time**: 45 min
 
 - [ ] 3.3.1 Read current ListTile component

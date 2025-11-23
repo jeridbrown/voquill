@@ -56,4 +56,18 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Prevent overscroll on webkit (iOS/Safari) */
+  @supports (-webkit-touch-callout: none) {
+    html {
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+    body {
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+  }
 }
