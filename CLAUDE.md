@@ -2,6 +2,34 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ MANDATORY WORKFLOW REQUIREMENT
+
+**CRITICAL: You MUST follow the PRD workflow for ANY changes that modify more than one file.**
+
+### Rules
+1. **Multi-file changes**: ALWAYS create PRD + task list first
+2. **Single-file changes**: ASK USER for permission to skip PRD workflow
+3. **Never start coding without user approval of approach**
+
+### Workflow Steps
+1. **Create PRD**: `docs/prds/<feature-name>.md` (use template in `docs/prds/README.md`)
+2. **Create Task List**: `docs/tasks/<feature-name>.md` (use template in `docs/tasks/README.md`)
+3. **Get User Approval**: Present PRD and task list, wait for approval
+4. **Create Feature Branch**: `git checkout -b feat/<name>` (off `dev`)
+5. **Execute Tasks**: Update task file in real-time as you work
+6. **Update Docs**: Update `CURRENT_STATE.md` when complete
+7. **PR to dev**: Never PR directly to `main`
+
+### Exceptions (Require User Permission)
+- Documentation-only changes
+- Single-file bug fixes
+- Typo corrections
+- Comment additions
+
+**If unsure, ASK. Never assume you can skip the workflow.**
+
+---
+
 ## Project Overview
 
 Voquill is a cross-platform voice-to-text desktop application built with Tauri (Rust + TypeScript/React). The repository is a Turborepo monorepo containing the desktop app, marketing website, Firebase backend, and shared packages.

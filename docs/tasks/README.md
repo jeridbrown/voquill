@@ -4,6 +4,14 @@ This directory contains **generated task lists** for implementing features and f
 
 ---
 
+## ⚠️ MANDATORY REQUIREMENT
+
+**Every PRD MUST have a corresponding task file.**
+
+Multi-file changes require both PRD + task list before coding begins.
+
+---
+
 ## Purpose
 
 Task files are generated from PRDs. Each task file breaks down a feature into **hierarchical, time-boxed tasks** (≤1 hour each).

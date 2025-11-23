@@ -4,6 +4,16 @@ This directory contains **Product Requirements Documents** for all major feature
 
 ---
 
+## ⚠️ MANDATORY REQUIREMENT
+
+**You MUST create a PRD for ANY changes that modify more than one file.**
+
+Single-file changes require user permission to skip PRD workflow.
+
+**If unsure, create the PRD. It's better to over-document than under-document.**
+
+---
+
 ## Purpose
 
 PRDs define the **what** and **why** of features before implementation:
