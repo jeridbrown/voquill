@@ -12,7 +12,10 @@ export const DashboardEntryLayout = ({
     <Stack
       sx={{
         flexGrow: 1,
+        flexShrink: 1,
+        minHeight: 0,
         overflowY: "auto",
+        overflowX: "hidden",
         pr: 2,
       }}
     >
@@ -23,6 +26,7 @@ export const DashboardEntryLayout = ({
           flexDirection: "column",
           pt: 1,
           pb: 8,
+          width: "100%",
         }}
       >
         {children}
