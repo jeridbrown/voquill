@@ -91,7 +91,7 @@ export function VirtualizedListPage<Item>({
   }, []);
 
   const headerPaddingTop = 1 - collapseProgress;
-  const headerPaddingBottom = 2 + (1 - collapseProgress) * heightMult;
+  const headerPaddingBottom = 1 + (1 - collapseProgress) * 1;
   const headerGap = 1 + (1 - collapseProgress);
   const titleFontSizePx =
     TITLE_FONT_SIZE_EXPANDED -
@@ -109,8 +109,8 @@ export function VirtualizedListPage<Item>({
         }}
       >
         <div
-          className={cn("mx-auto relative", maxWidthClasses[headerMaxWidth])}
-          style={{ gap: `${headerGap * 16}px` }}
+          className={cn("mx-auto flex flex-col", maxWidthClasses[headerMaxWidth])}
+          style={{ gap: `${headerGap * 8}px` }}
         >
           <div className="flex flex-row gap-4 items-start justify-between">
             <h1
@@ -126,10 +126,9 @@ export function VirtualizedListPage<Item>({
           </div>
           {subtitle ? (
             <div
-              className="text-lg text-muted-foreground absolute bottom-0"
+              className="text-base text-muted-foreground"
               style={{
                 opacity: subtitleOpacity,
-                transform: `translateY(${subtitleOpacity * 4}px)`,
               }}
             >
               {subtitle}
@@ -163,7 +162,7 @@ export function VirtualizedListPage<Item>({
               : undefined
           }
           components={{
-            Header: () => <div style={{ height: headerShrinkAmount / 2 }} />,
+            Header: () => <div style={{ height: 0 }} />,
           }}
           itemContent={(index, item) => (
             <div className={cn("mx-auto", maxWidthClasses[contentMaxWidth])}>
