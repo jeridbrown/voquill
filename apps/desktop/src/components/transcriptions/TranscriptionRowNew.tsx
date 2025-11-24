@@ -354,10 +354,7 @@ export const TranscriptionRow = ({ id }: TranscriptionRowProps) => {
                     defaultMessage: "View transcription details",
                   })}
                   onClick={handleDetailsOpen}
-                  className={cn(
-                    "p-1 rounded hover:bg-accent",
-                    hasMetadata && "text-primary"
-                  )}
+                  className="p-1 rounded hover:bg-accent"
                 >
                   <Info className="h-4 w-4" />
                 </button>
