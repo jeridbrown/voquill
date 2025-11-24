@@ -21,7 +21,6 @@ import { produceAppState, useAppStore } from "../../store";
 import { TypographyWithMore } from "../common/TypographyWithMoreNew";
 import { TranscriptionToneMenu } from "./TranscriptionToneMenuNew";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { cn } from "../ui/utils/cn";
 
 export type TranscriptionRowProps = {
   id: string;
@@ -92,12 +91,6 @@ export const TranscriptionRow = ({ id }: TranscriptionRowProps) => {
   const transcription = useAppStore((state) =>
     getRec(state.transcriptionById, id)
   );
-
-  const hasMetadata = useMemo(() => {
-    const model = transcription?.modelSize?.trim();
-    const device = transcription?.inferenceDevice?.trim();
-    return Boolean(model || device);
-  }, [transcription?.inferenceDevice, transcription?.modelSize]);
 
   const audioSnapshot = transcription?.audio;
   const audioSrc = useMemo(() => {

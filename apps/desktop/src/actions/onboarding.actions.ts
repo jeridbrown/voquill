@@ -97,6 +97,7 @@ export const submitOnboarding = async () => {
       timezone: null,
       preferredMicrophone: null,
       preferredLanguage: DEFAULT_LOCALE,
+      preferredTheme: "system",
       wordsThisMonth: 0,
       wordsThisMonthMonth: null,
       wordsTotal: 0,

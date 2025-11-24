@@ -92,7 +92,7 @@ const Main = ({ children }: ChildrenProps) => {
   return (
     <React.StrictMode>
       <IntlProvider {...intlConfig}>
-        {children}
+        <>{children}</>
       </IntlProvider>
     </React.StrictMode>
   );
