@@ -16,6 +16,7 @@ import {
 import { Label } from "../ui/label";
 
 const ADD_TONE_MENU_VALUE = "__add_tone_option__";
+const DEFAULT_TONE_VALUE = "__default_tone__";
 
 type ToneSelectProps = {
   value: string | null | undefined;
@@ -56,13 +57,13 @@ export const ToneSelect = ({
         return;
       }
 
-      const toneId = newValue === "" ? null : newValue;
+      const toneId = newValue === DEFAULT_TONE_VALUE ? null : newValue;
       onToneChange(toneId);
     },
     [addToneTargetId, onToneChange]
   );
 
-  const resolvedValue = getRec(toneById, value)?.id ?? "";
+  const resolvedValue = getRec(toneById, value)?.id ?? DEFAULT_TONE_VALUE;
 
   const defaultLabel = defaultTone && !trueDefault ? (
     <FormattedMessage
@@ -94,7 +95,7 @@ export const ToneSelect = ({
             </div>
           </SelectItem>
           {includeDefaultOption && (
-            <SelectItem value="">
+            <SelectItem value={DEFAULT_TONE_VALUE}>
               {defaultLabel}
             </SelectItem>
           )}

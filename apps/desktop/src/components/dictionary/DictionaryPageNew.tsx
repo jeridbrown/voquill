@@ -95,7 +95,6 @@ export default function DictionaryPage() {
       action={addButton}
       items={termIds}
       computeItemKey={(id) => id}
-      heightMult={10}
       renderItem={(id) => <DictionaryRow key={id} id={id} />}
     />
   );

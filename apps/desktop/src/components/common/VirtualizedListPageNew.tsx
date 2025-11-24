@@ -16,7 +16,6 @@ export type VirtualizedListPageProps<Item> = {
   computeItemKey?: (item: Item, index: number) => string | number;
   headerMaxWidth?: "sm" | "md" | "lg";
   contentMaxWidth?: "sm" | "md" | "lg";
-  heightMult?: number;
   emptyState?: ReactNode;
   virtuosoProps?: Omit<
     VirtuosoProps<Item, unknown>,
@@ -45,7 +44,6 @@ export function VirtualizedListPage<Item>({
   headerMaxWidth = "sm",
   contentMaxWidth = "sm",
   virtuosoProps,
-  heightMult = 3,
   emptyState,
 }: VirtualizedListPageProps<Item>) {
   const [scrollerNode, setScrollerNode] = useState<HTMLElement | Window | null>(
@@ -97,7 +95,6 @@ export function VirtualizedListPage<Item>({
     TITLE_FONT_SIZE_EXPANDED -
     (TITLE_FONT_SIZE_EXPANDED - TITLE_FONT_SIZE_COLLAPSED) * collapseProgress;
   const subtitleOpacity = Math.min(lerp(0, 1, 1 - collapseProgress * 2), 1);
-  const headerShrinkAmount = COLLAPSE_DISTANCE_PX * (1 - collapseProgress);
 
   return (
     <div className="flex-grow flex flex-col h-full overflow-hidden">
