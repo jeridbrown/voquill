@@ -76,7 +76,7 @@ export const ToneSelect = ({
 
   return (
     <div className={className}>
-      {label && <Label className="mb-2">{label}</Label>}
+      {label && <Label className="mb-2 text-muted-foreground">{label}</Label>}
       <Select
         value={resolvedValue}
         onValueChange={handleToneChange}
@@ -84,7 +84,7 @@ export const ToneSelect = ({
       >
         <SelectTrigger className="min-w-[160px]">
           <SelectValue>
-            {resolvedValue ? toneById[resolvedValue]?.name ?? resolvedValue : defaultLabel}
+            {resolvedValue === DEFAULT_TONE_VALUE ? defaultLabel : toneById[resolvedValue]?.name ?? defaultLabel}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
@@ -105,7 +105,7 @@ export const ToneSelect = ({
                 <span>{tone.name}</span>
                 {!tone.isSystem && (
                   <button
-                    className="p-1 hover:bg-accent rounded"
+                    className="p-1 hover:bg-gray-600 hover:text-white transition-colors rounded"
                     onClick={(event) => {
                       event.stopPropagation();
                       event.preventDefault();

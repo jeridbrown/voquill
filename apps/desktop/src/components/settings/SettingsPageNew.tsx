@@ -4,6 +4,7 @@ import {
   Volume2,
   Keyboard,
   Languages,
+  Moon,
   WavesLadder,
   Wand2,
   Lock,
@@ -21,7 +22,7 @@ import { invokeHandler } from "@repo/functions";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { showErrorSnackbar } from "../../actions/app.actions";
 import { setAutoLaunchEnabled } from "../../actions/settings.actions";
-import { setPreferredLanguage } from "../../actions/user.actions";
+import { setPreferredLanguage, setPreferredTheme } from "../../actions/user.actions";
 import { loadTones } from "../../actions/tone.actions";
 import { getAuthRepo } from "../../repos";
 import { produceAppState, useAppStore } from "../../store";
@@ -71,11 +72,21 @@ export default function SettingsPage() {
     return normalized ?? DEFAULT_LOCALE;
   });
 
+  const preferredTheme = useAppStore((state) => {
+    const user = getMyUser(state);
+    return user?.preferredTheme ?? "system";
+  });
+
   const handlePreferredLanguageChange = (value: string) => {
     const nextValue = (value as Locale) ?? DEFAULT_LOCALE;
     void setPreferredLanguage(nextValue).then(() => {
       loadTones();
     });
+  };
+
+  const handlePreferredThemeChange = (value: string) => {
+    const nextValue = value as "light" | "dark" | "system";
+    void setPreferredTheme(nextValue);
   };
 
   const openChangePasswordDialog = () => {
@@ -192,6 +203,30 @@ export default function SettingsPage() {
                     {label}
                   </SelectItem>
                 ))}
+              </SelectContent>
+            </Select>
+          </div>
+        }
+      />
+      <ListTile
+        title={<FormattedMessage defaultMessage="Theme" />}
+        leading={<Moon className="h-5 w-5" />}
+        trailing={
+          <div onClick={(event) => event.stopPropagation()} className="min-w-[160px]">
+            <Select value={preferredTheme} onValueChange={handlePreferredThemeChange}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">
+                  <FormattedMessage defaultMessage="Light" />
+                </SelectItem>
+                <SelectItem value="dark">
+                  <FormattedMessage defaultMessage="Dark" />
+                </SelectItem>
+                <SelectItem value="system">
+                  <FormattedMessage defaultMessage="System" />
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>

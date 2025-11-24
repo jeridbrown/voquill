@@ -18,9 +18,9 @@ const buttonVariants: Record<ButtonVariant, string> = {
   secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
   destructive:
     "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-  ghost: "hover:bg-accent hover:text-accent-foreground",
+  ghost: "hover:bg-gray-600 hover:text-white transition-colors",
   outline:
-    "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+    "border border-input bg-background hover:bg-gray-600 hover:text-white transition-colors",
 };
 
 const buttonSizes: Record<ButtonSize, string> = {

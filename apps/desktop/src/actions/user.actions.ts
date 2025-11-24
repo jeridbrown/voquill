@@ -159,6 +159,18 @@ export const setPreferredLanguage = async (language: Locale): Promise<void> => {
   );
 };
 
+export const setPreferredTheme = async (
+  theme: "light" | "dark" | "system"
+): Promise<void> => {
+  await updateUser(
+    (user) => {
+      user.preferredTheme = theme;
+    },
+    "Unable to update preferred theme. User not found.",
+    "Failed to save preferred theme. Please try again."
+  );
+};
+
 export const setInteractionChimeEnabled = async (enabled: boolean) => {
   await updateUser(
     (user) => {

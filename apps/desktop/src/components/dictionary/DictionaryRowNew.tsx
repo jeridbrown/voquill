@@ -138,7 +138,7 @@ export const DictionaryRow = ({ id }: DictionaryRowProps) => {
         )}
         onClick={handleDelete}
         className={cn(
-          "p-1 rounded hover:bg-accent flex-shrink-0"
+          "p-1 rounded hover:bg-gray-600 hover:text-white transition-colors flex-shrink-0"
         )}
       >
         <Trash2 className="h-4 w-4" />

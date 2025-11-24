@@ -31,7 +31,7 @@ const HoverButton = ({ idle, hover, hovered, onClick, left }: HoverButtonProps) 
           onClick={handleClick}
           onMouseDown={handleMouseDown}
           className={cn(
-            "inline-flex items-center justify-center rounded-full p-1 hover:bg-accent -my-2 cursor-pointer",
+            "inline-flex items-center justify-center rounded-full p-1 hover:bg-gray-600 hover:text-white transition-colors -my-2 cursor-pointer",
             left ? "-ml-3" : "-mr-3",
             hoverState ? "inline-flex" : "hidden"
           )}

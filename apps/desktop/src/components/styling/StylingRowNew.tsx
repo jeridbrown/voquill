@@ -25,7 +25,7 @@ export const StylingRow = ({ id }: StylingRowProps) => {
   );
   const toneValue = target?.toneId ?? null;
   const leading = (
-    <div className="overflow-hidden rounded-md min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px] bg-accent mr-2">
+    <div className="overflow-hidden rounded-md min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px] bg-gray-800 mr-2">
       {target?.iconPath && (
         <StorageImage
           path={target.iconPath}
@@ -47,11 +47,12 @@ export const StylingRow = ({ id }: StylingRowProps) => {
   );
 
   return (
-    <ListTile
-      title={target?.name}
-      trailing={select}
-      leading={leading}
-      className="bg-accent mb-2 rounded"
-    />
+    <div className="border border-border rounded-lg mb-2 bg-gray-900/30">
+      <ListTile
+        title={target?.name}
+        trailing={select}
+        leading={leading}
+      />
+    </div>
   );
 };

@@ -354,7 +354,7 @@ export const TranscriptionRow = ({ id }: TranscriptionRowProps) => {
                     defaultMessage: "View transcription details",
                   })}
                   onClick={handleDetailsOpen}
-                  className="p-1 rounded hover:bg-accent"
+                  className="p-1 rounded hover:bg-gray-600 hover:text-white transition-colors"
                 >
                   <Info className="h-4 w-4" />
                 </button>
@@ -374,7 +374,7 @@ export const TranscriptionRow = ({ id }: TranscriptionRowProps) => {
                   onClick={() =>
                     handleCopyTranscript(transcription?.transcript || "")
                   }
-                  className="p-1 rounded hover:bg-accent"
+                  className="p-1 rounded hover:bg-gray-600 hover:text-white transition-colors"
                 >
                   <Copy className="h-4 w-4" />
                 </button>
@@ -390,7 +390,7 @@ export const TranscriptionRow = ({ id }: TranscriptionRowProps) => {
                     defaultMessage: "Delete transcript",
                   })}
                   onClick={() => handleDeleteTranscript(id)}
-                  className="p-1 rounded hover:bg-accent"
+                  className="p-1 rounded hover:bg-gray-600 hover:text-white transition-colors"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
