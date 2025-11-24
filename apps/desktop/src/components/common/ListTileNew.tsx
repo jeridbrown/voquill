@@ -103,8 +103,10 @@ export const ListTile = forwardRef<HTMLDivElement, ListTileProps>(
         <div
           onClick={disabled ? undefined : handleClick}
           className={cn(
-            "flex items-center w-full px-4 py-2 cursor-pointer hover:bg-accent transition-colors",
-            selected && "bg-primary text-primary-foreground hover:bg-primary",
+            "flex items-center w-full px-4 py-2 cursor-pointer transition-colors rounded-md",
+            selected
+              ? "bg-gray-700 text-white hover:bg-gray-700"
+              : "hover:bg-gray-200",
             disabled && "opacity-50 cursor-not-allowed"
           )}
         >
