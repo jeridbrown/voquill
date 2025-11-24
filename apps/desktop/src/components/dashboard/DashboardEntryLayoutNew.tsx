@@ -31,7 +31,7 @@ export const DashboardEntryLayout = ({
     >
       <div
         className={cn(
-          "flex flex-col w-full pt-2 pb-16 pr-4",
+          "flex flex-col w-full pt-2 pb-8 pr-4",
           maxWidthClasses[maxWidth]
         )}
       >
