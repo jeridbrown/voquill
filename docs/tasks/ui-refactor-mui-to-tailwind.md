@@ -4,7 +4,7 @@
 **Project Plan**: `docs/PROJECT_PLAN_UI_REFACTOR.md`
 **Status**: ✅ Migration Complete - Ready for User Testing
 **Created**: 2025-11-22
-**Last Updated**: 2025-11-23
+**Last Updated**: 2025-11-24
 
 ---
 
@@ -564,10 +564,10 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 
 ---
 
-### Phase 10: Cleanup & Remove MUI
-**Status**: 🔄 Partially Complete (cleanup done, MUI removal deferred)
+### Phase 10: Cleanup & Remove MUI from App Shell
+**Status**: ✅ Complete (MUI removed from main app, still present in unmigrated flows)
 **Estimated Time**: 1 day
-**Goal**: Remove all MUI dependencies and clean up code
+**Goal**: Remove MUI from app shell and clean up migrated code
 
 #### 10.1 Remove MUI Dependencies
 **Status**: ⏭️ Deferred (onboarding/login/pricing/dialogs still use MUI)
@@ -631,6 +631,19 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 - [x] 10.5.5 Add any missing Tailwind utilities (none needed)
 
 **Notes**: CSS is clean! Only Tailwind directives and CSS variables for theming.
+
+#### 10.6 Remove MUI from App Shell
+**Status**: ✅ Complete
+**Time**: 45 min
+
+- [x] 10.6.1 Remove ThemeProvider from main.tsx
+- [x] 10.6.2 Remove CssBaseline from main.tsx
+- [x] 10.6.3 Replace MUI Box with Tailwind div in AppWithLoading.tsx
+- [x] 10.6.4 Simplify useTheme hook to only control Tailwind
+- [x] 10.6.5 Remove body background styles from index.html
+- [x] 10.6.6 Verify theme switching works with single Tailwind system
+
+**Notes**: MUI completely removed from main app shell! ThemeProvider and CssBaseline no longer needed. App uses single Tailwind theme system with dark mode class strategy. Background controlled by Tailwind CSS variables. Theme switching works properly.
 
 ---
 
@@ -811,6 +824,92 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 
 ---
 
+### Phase 13: Theme Selector & UI Contrast Improvements
+**Status**: ✅ Complete
+**Estimated Time**: 1 day
+**Goal**: Add user-configurable theme preference and improve UI contrast
+
+#### 13.1 Database Migration for Theme Preference
+**Status**: ✅ Complete
+**Time**: 15 min
+
+- [x] 13.1.1 Create migration 025_user_preferred_theme.sql
+- [x] 13.1.2 Add preferred_theme column (TEXT NOT NULL DEFAULT 'system')
+- [x] 13.1.3 Register migration in db/mod.rs
+
+**Notes**: Migration adds preferred_theme column to user_profiles table with values: 'light', 'dark', 'system'. Default is 'system' to match system theme.
+
+#### 13.2 Update Data Models
+**Status**: ✅ Complete
+**Time**: 30 min
+
+- [x] 13.2.1 Update Rust User struct in domain/user.rs
+- [x] 13.2.2 Add default_preferred_theme() function
+- [x] 13.2.3 Update user_queries.rs INSERT/UPDATE/SELECT
+- [x] 13.2.4 Update TypeScript User type in user.types.ts
+- [x] 13.2.5 Update UserZod schema with enum validation
+- [x] 13.2.6 Update user.repo.ts conversion functions
+
+**Notes**: Full-stack type safety with Rust, TypeScript, and Zod validation. Theme values: "light" | "dark" | "system".
+
+#### 13.3 Implement Theme Management Logic
+**Status**: ✅ Complete
+**Time**: 45 min
+
+- [x] 13.3.1 Create useTheme hook in hooks/useTheme.ts
+- [x] 13.3.2 Implement system theme detection (matchMedia)
+- [x] 13.3.3 Apply dark class to html element
+- [x] 13.3.4 Listen for system theme changes
+- [x] 13.3.5 Create setPreferredTheme action
+- [x] 13.3.6 Integrate useTheme in AppWithLoading.tsx
+
+**Notes**: useTheme hook controls Tailwind dark mode via class on html element. Listens to system preference changes with window.matchMedia. Cleanup on unmount.
+
+#### 13.4 Add Theme Selector UI
+**Status**: ✅ Complete
+**Time**: 30 min
+
+- [x] 13.4.1 Add Moon icon import to SettingsPageNew
+- [x] 13.4.2 Create theme ListTile with Select dropdown
+- [x] 13.4.3 Add Light/Dark/System options
+- [x] 13.4.4 Wire up handlePreferredThemeChange
+- [x] 13.4.5 Extract i18n messages (npm run i18n:extract)
+- [x] 13.4.6 Sync i18n to all locales (npm run i18n:sync)
+
+**Notes**: Theme selector in Settings page General section, below Preferred Language. Uses existing Select component with FormattedMessage for i18n.
+
+#### 13.5 UI Contrast Improvements
+**Status**: ✅ Complete
+**Time**: 60 min
+
+- [x] 13.5.1 Fix TranscriptionDetailsDialogNew text blocks (bg-accent)
+- [x] 13.5.2 Improve StylingRowNew contrast (bg-gray-900/30, bg-gray-800)
+- [x] 13.5.3 Fix ToneSelectNew default display logic
+- [x] 13.5.4 Update button.tsx ghost/outline hover (hover:bg-gray-600)
+- [x] 13.5.5 Add text-foreground to select.tsx trigger
+- [x] 13.5.6 Update select.tsx item focus (focus:bg-gray-600)
+- [x] 13.5.7 Add text-foreground to label.tsx
+- [x] 13.5.8 Fix action button hover in TranscriptionRowNew
+- [x] 13.5.9 Fix action button hover in DictionaryRowNew
+- [x] 13.5.10 Add text-muted-foreground to ToneSelectNew label
+
+**Notes**: Established consistent gray color palette (gray-500/600/700) for hover states. Pattern: hover:bg-gray-600 hover:text-white transition-colors. Fixed "__default_tone__" display bug.
+
+#### 13.6 Testing & Verification
+**Status**: ✅ Complete
+**Time**: 30 min
+
+- [x] 13.6.1 Test theme switching (Light/Dark/System)
+- [x] 13.6.2 Verify system theme detection works
+- [x] 13.6.3 Test theme persistence across sessions
+- [x] 13.6.4 Verify all contrast improvements visible
+- [x] 13.6.5 Test on both light and dark modes
+- [x] 13.6.6 User confirmed: "that looks good now"
+
+**Notes**: Theme switching works correctly. User tested and approved colors on both themes: "I have tested and like the colors on both themes. lets move forward."
+
+---
+
 ## Definition of Done
 
 ### Must Have (Required)
@@ -847,11 +946,11 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 
 ## Progress Tracking
 
-**Total Phases**: 12
-**Completed Phases**: 10 (Phases 1-8, 10 partially complete)
-**In Progress**: Phase 12 (Documentation & Handoff)
+**Total Phases**: 13
+**Completed Phases**: 11 (Phases 1-8, 10, 12, 13)
+**In Progress**: None
 **Pending User Testing**: Phase 11
-**Completion**: 83% overall (10 of 12 phases, excluding user testing)
+**Completion**: 92% overall (11 of 13 phases complete, Phase 11 pending user testing, Phase 9 merged)
 
 **Migration Summary**:
 - ✅ Phase 1: Setup & Foundation (Tailwind, Radix, icons)
@@ -863,19 +962,22 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 - ✅ Phase 7: Dictionary Page
 - ✅ Phase 8: Styling/Tones Page
 - ⏭️ Phase 9: Merged with Phase 8
-- 🔄 Phase 10: Cleanup (MUI removal deferred)
+- ✅ Phase 10: MUI removal from app shell
 - ⏳ Phase 11: User Testing (pending)
-- 🔄 Phase 12: Documentation (in progress)
+- ✅ Phase 12: Documentation & Handoff
+- ✅ Phase 13: Theme Selector & UI Contrast
 
 **Code Impact**:
 - **Components Created**: 32 new Tailwind + Radix components
 - **Components Deleted**: 22 old MUI components (-3,314 lines)
-- **Files Modified**: ~40 files updated
-- **Build Status**: ✅ Successful (22.14s)
+- **Database Migrations**: 1 new migration (025_user_preferred_theme.sql)
+- **Hooks Created**: useTheme.ts (theme management)
+- **Files Modified**: ~66 files updated (26 in latest commit)
+- **Build Status**: ✅ Successful
 - **Bundle Size**: 1,737.54 kB JS + 71.16 kB CSS
 
-**Last Update**: 2025-11-23
-**Work Session**: All main dashboard pages migrated, cleanup complete, documentation in progress
+**Last Update**: 2025-11-24
+**Work Session**: Theme selector feature complete, MUI removed from app shell, UI contrast improvements, documentation updated
 
 ---
 
@@ -899,13 +1001,17 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 - ✅ Dialog: Complete with header, footer, close button
 - ⏭️ Skipped Popover, Badge, Tooltip, Textarea (will create as needed)
 
-### Current State (2025-11-23)
+### Current State (2025-11-24)
 - Working on branch: `feature/ui-refactor-tailwind` ✅
 - All main dashboard pages migrated to Tailwind + Radix ✅
 - Removed 22 old MUI component files (-3,314 lines) ✅
+- MUI removed from main app shell (ThemeProvider, CssBaseline) ✅
+- Theme selector feature complete (Light/Dark/System) ✅
+- UI contrast improvements complete ✅
 - Build successful with no TypeScript errors ✅
+- Documentation updated (task file, ready for CURRENT_STATE.md) ✅
 - **Status**: Ready for user testing
-- **Next**: User will test all migrated pages on Windows
+- **Next**: Update CURRENT_STATE.md, push to remote, user testing
 - **MUI Status**: Still present for onboarding/login/pricing pages (not in scope)
 
 ### Known Issues
@@ -976,7 +1082,10 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 - ✅ **5 Main Pages Migrated**: Settings, Home, Transcriptions, Dictionary, Styling/Tones
 - ✅ **32 New Components Created**: Complete UI component library with Tailwind + Radix
 - ✅ **22 Old Components Removed**: Deleted 3,314 lines of MUI code
-- ✅ **Build Successful**: No TypeScript errors, builds in 22.14s
+- ✅ **MUI Removed from App Shell**: ThemeProvider, CssBaseline, Box replaced with Tailwind
+- ✅ **Theme Selector Feature**: User-configurable Light/Dark/System theme preference
+- ✅ **UI Contrast Improvements**: Consistent gray palette, fixed visibility issues
+- ✅ **Build Successful**: No TypeScript errors
 - ✅ **Router Updated**: All migrated pages wired up correctly
 
 ### What's Left for Testing
@@ -1012,6 +1121,7 @@ This task list breaks down the UI refactor into actionable tasks. Each task shou
 
 ---
 
-**Last Updated**: 2025-11-23
-**Status**: Migration Complete - Awaiting User Testing
+**Last Updated**: 2025-11-24
+**Status**: Migration Complete + Theme Selector - Awaiting User Testing
 **Branch**: feature/ui-refactor-tailwind
+**Commits**: 17 commits (16 previously pushed + 1 new theme selector commit)
