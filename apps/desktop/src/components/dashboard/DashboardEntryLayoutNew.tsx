@@ -24,13 +24,14 @@ export const DashboardEntryLayout = ({
   return (
     <div
       className={cn(
-        "flex-grow flex-shrink min-h-0 overflow-y-auto overflow-x-hidden pr-4",
+        "flex-grow flex-shrink overflow-x-hidden",
         className
       )}
+      style={{ overflowY: 'auto' }}
     >
       <div
         className={cn(
-          "flex flex-col w-full pt-2 pb-16",
+          "flex flex-col w-full pt-2 pb-16 pr-4",
           maxWidthClasses[maxWidth]
         )}
       >

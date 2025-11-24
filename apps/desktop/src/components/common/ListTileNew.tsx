@@ -106,7 +106,7 @@ export const ListTile = forwardRef<HTMLDivElement, ListTileProps>(
             "flex items-center w-full px-4 py-2 cursor-pointer transition-colors rounded-md",
             selected
               ? "bg-gray-700 text-white hover:bg-gray-700"
-              : "hover:bg-gray-200",
+              : "hover:bg-gray-500 hover:text-white",
             disabled && "opacity-50 cursor-not-allowed"
           )}
         >
