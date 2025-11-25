@@ -17,9 +17,9 @@ import { connectStorageEmulator, getStorage } from "firebase/storage";
 import React, { useMemo } from "react";
 import ReactDOM from "react-dom/client";
 import { IntlProvider } from "react-intl";
+import { Toaster } from "sonner";
 import { OverlayRoot } from "./components/overlay/OverlayRoot";
 import { AppWithLoading } from "./components/root/AppWithLoading";
-import { SnackbarEmitter } from "./components/root/SnackbarEmitter";
 import { getIntlConfig } from "./i18n";
 import { getIsEmulators, getStripePublicKey } from "./utils/env.utils";
 
@@ -109,7 +109,7 @@ if (isOverlayWindow) {
   root.render(
     <Main>
       <Elements stripe={stripePromise}>
-        <SnackbarEmitter />
+        <Toaster richColors position="bottom-right" />
         <AppWithLoading />
       </Elements>
     </Main>

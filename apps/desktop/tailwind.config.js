@@ -56,6 +56,11 @@ export default {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        progress: {
+          '0%': { transform: 'translateX(-100%) scaleX(0.5)' },
+          '50%': { transform: 'translateX(0%) scaleX(1)' },
+          '100%': { transform: 'translateX(100%) scaleX(0.5)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',

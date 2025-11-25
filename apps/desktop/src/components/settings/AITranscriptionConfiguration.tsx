@@ -1,12 +1,3 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { useCallback, useEffect, useMemo } from "react";
 import { FormattedMessage } from "react-intl";
 import {
@@ -21,6 +12,14 @@ import {
   SegmentedControl,
   SegmentedControlOption,
 } from "../common/SegmentedControl";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { maybeArrayElements } from "./AIPostProcessingConfiguration";
 import { ApiKeyList } from "./ApiKeyList";
 import { VoquillCloudSetting } from "./VoquillCloudSetting";
@@ -119,7 +118,7 @@ export const AITranscriptionConfiguration = ({
   }, []);
 
   return (
-    <Stack spacing={3} alignItems="flex-start" sx={{ width: "100%" }}>
+    <div className="flex flex-col gap-6 items-start w-full">
       <SegmentedControl<TranscriptionMode>
         value={transcription.mode}
         onChange={handleModeChange}
@@ -140,54 +139,54 @@ export const AITranscriptionConfiguration = ({
       />
 
       {transcription.mode === "local" && (
-        <Stack spacing={3} sx={{ width: "100%" }}>
-          <FormControl fullWidth size="small">
-            <InputLabel id="processing-device-label">
+        <div className="flex flex-col gap-6 w-full">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="processing-device">
               <FormattedMessage defaultMessage="Processing device" />
-            </InputLabel>
+            </Label>
             <Select
-              labelId="processing-device-label"
-              label={<FormattedMessage defaultMessage="Processing device" />}
               value={transcription.device}
-              onChange={(event) => handleDeviceChange(event.target.value)}
+              onValueChange={handleDeviceChange}
             >
-              {deviceOptions.map(({ value, label }) => (
-                <MenuItem key={value} value={value}>
-                  {label}
-                </MenuItem>
-              ))}
+              <SelectTrigger id="processing-device">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {deviceOptions.map(({ value, label }) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
-          </FormControl>
+          </div>
 
-          <FormControl fullWidth size="small">
-            <InputLabel id="model-size-label">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="model-size">
               <FormattedMessage defaultMessage="Model size" />
-            </InputLabel>
+            </Label>
             <Select
-              labelId="model-size-label"
-              label={<FormattedMessage defaultMessage="Model size" />}
               value={transcription.modelSize}
-              onChange={(event) => handleModelSizeChange(event.target.value)}
+              onValueChange={handleModelSizeChange}
             >
-              {MODEL_OPTIONS.map(({ value, label, helper }) => (
-                <MenuItem key={value} value={value}>
-                  <Box>
-                    <Typography variant="body2" fontWeight={600}>
-                      {label}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      display="block"
-                    >
-                      {helper}
-                    </Typography>
-                  </Box>
-                </MenuItem>
-              ))}
+              <SelectTrigger id="model-size">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {MODEL_OPTIONS.map(({ value, label, helper }) => (
+                  <SelectItem key={value} value={value}>
+                    <div>
+                      <div className="text-sm font-semibold">{label}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {helper}
+                      </div>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
-          </FormControl>
-        </Stack>
+          </div>
+        </div>
       )}
 
       {transcription.mode === "api" && (
@@ -198,6 +197,6 @@ export const AITranscriptionConfiguration = ({
       )}
 
       {transcription.mode === "cloud" && <VoquillCloudSetting />}
-    </Stack>
+    </div>
   );
 };

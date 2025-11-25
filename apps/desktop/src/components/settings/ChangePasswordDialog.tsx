@@ -1,15 +1,15 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { showErrorSnackbar } from "../../actions/app.actions";
 import { getAuthRepo } from "../../repos";
 import { getAppState, produceAppState, useAppStore } from "../../store";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 
 export const ChangePasswordDialog = () => {
   const open = useAppStore((state) => state.settings.changePasswordDialogOpen);
@@ -40,33 +40,38 @@ export const ChangePasswordDialog = () => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>
-        <Typography variant="h6" component="div" fontWeight={600}>
-          <FormattedMessage defaultMessage="Change password" />
-        </Typography>
-      </DialogTitle>
-      <DialogContent>
-        <Typography variant="body1" component="div" sx={{ mb: 2 }}>
-          <FormattedMessage defaultMessage="We'll send a password reset link to your email address. Click the link in the email to create a new password." />
-        </Typography>
-        {userEmail && (
-          <Typography variant="body2" component="div" color="textSecondary">
-            <FormattedMessage
-              defaultMessage="Reset link will be sent to: {email}"
-              values={{ email: <strong>{userEmail}</strong> }}
-            />
-          </Typography>
-        )}
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => !isOpen && handleClose()}
+    >
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>
+            <FormattedMessage defaultMessage="Change password" />
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 mt-4">
+          <p className="text-base">
+            <FormattedMessage defaultMessage="We'll send a password reset link to your email address. Click the link in the email to create a new password." />
+          </p>
+          {userEmail && (
+            <p className="text-sm text-muted-foreground">
+              <FormattedMessage
+                defaultMessage="Reset link will be sent to: {email}"
+                values={{ email: <strong>{userEmail}</strong> }}
+              />
+            </p>
+          )}
+        </div>
+        <DialogFooter>
+          <Button onClick={handleClose} variant="ghost">
+            <FormattedMessage defaultMessage="Cancel" />
+          </Button>
+          <Button onClick={handleSubmit} variant="primary">
+            <FormattedMessage defaultMessage="Send reset link" />
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} variant="text">
-          <FormattedMessage defaultMessage="Cancel" />
-        </Button>
-        <Button onClick={handleSubmit} variant="contained">
-          <FormattedMessage defaultMessage="Send reset link" />
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

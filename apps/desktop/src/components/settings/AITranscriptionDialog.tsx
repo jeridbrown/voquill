@@ -1,16 +1,13 @@
-import CloseIcon from "@mui/icons-material/Close";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { produceAppState, useAppStore } from "../../store";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 import { AITranscriptionConfiguration } from "./AITranscriptionConfiguration";
 
 export const AITranscriptionDialog = () => {
@@ -23,31 +20,28 @@ export const AITranscriptionDialog = () => {
   };
 
   return (
-    <Dialog open={open} onClose={closeDialog} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ display: "flex", alignItems: "center" }}>
-        <FormattedMessage defaultMessage="AI transcription" />
-        <IconButton
-          aria-label="Close"
-          onClick={closeDialog}
-          size="small"
-          sx={{ ml: "auto" }}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent dividers>
-        <Stack spacing={3} alignItems="flex-start">
-          <Typography variant="body1" color="text.secondary">
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => !isOpen && closeDialog()}
+    >
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>
+            <FormattedMessage defaultMessage="AI transcription" />
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-6 items-start mt-4">
+          <p className="text-base text-muted-foreground">
             <FormattedMessage defaultMessage="Decide how Voquill should transcribe your recordings—locally on your machine or through a connected provider." />
-          </Typography>
+          </p>
           <AITranscriptionConfiguration />
-        </Stack>
+        </div>
+        <DialogFooter>
+          <Button onClick={closeDialog}>
+            <FormattedMessage defaultMessage="Done" />
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDialog}>
-          <FormattedMessage defaultMessage="Done" />
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

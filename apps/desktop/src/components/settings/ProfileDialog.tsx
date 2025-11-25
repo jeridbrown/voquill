@@ -1,17 +1,18 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Stack,
-  TextField,
-} from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { setUserName } from "../../actions/user.actions";
 import { useMyUser } from "../../hooks/user.hooks";
 import { produceAppState, useAppStore } from "../../store";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export const ProfileDialog = () => {
   const open = useAppStore((state) => state.settings.profileDialogOpen);
@@ -66,32 +67,48 @@ export const ProfileDialog = () => {
   }, [canSave, trimmed, closeDialog]);
 
   return (
-    <Dialog open={open} onClose={closeDialog} maxWidth="xs" fullWidth>
-      <DialogTitle>
-        <FormattedMessage defaultMessage="My profile" />
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={2} sx={{ mt: 1 }}>
-          <TextField
-            autoFocus
-            label={<FormattedMessage defaultMessage="Username" />}
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-            disabled={!user || saving}
-            size="small"
-            fullWidth
-            helperText={<FormattedMessage defaultMessage="Used to sign things like emails and stuff" />}
-          />
-        </Stack>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => !isOpen && closeDialog()}
+    >
+      <DialogContent className="max-w-xs">
+        <DialogHeader>
+          <DialogTitle>
+            <FormattedMessage defaultMessage="My profile" />
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="username">
+              <FormattedMessage defaultMessage="Username" />
+            </Label>
+            <Input
+              id="username"
+              autoFocus
+              value={value}
+              onChange={(event) => setValue(event.target.value)}
+              disabled={!user || saving}
+              inputSize="sm"
+            />
+            <p className="text-xs text-muted-foreground">
+              <FormattedMessage defaultMessage="Used to sign things like emails and stuff" />
+            </p>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button onClick={closeDialog} disabled={saving} variant="outline">
+            <FormattedMessage defaultMessage="Cancel" />
+          </Button>
+          <Button
+            onClick={handleSave}
+            disabled={!canSave}
+            loading={saving}
+            variant="primary"
+          >
+            <FormattedMessage defaultMessage="Save" />
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDialog} disabled={saving}>
-          <FormattedMessage defaultMessage="Cancel" />
-        </Button>
-        <Button onClick={handleSave} disabled={!canSave} variant="contained">
-          <FormattedMessage defaultMessage="Save" />
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
