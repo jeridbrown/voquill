@@ -1,10 +1,10 @@
-import { Button, Stack, Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import {
   goBackOnboardingPage,
   goToOnboardingPage,
 } from "../../actions/onboarding.actions";
 import { useAppStore } from "../../store";
+import { Button } from "../ui/button";
 import { AITranscriptionConfiguration } from "../settings/AITranscriptionConfiguration";
 import { FormContainer } from "./OnboardingShared";
 
@@ -17,27 +17,27 @@ export const TranscriptionMethodForm = () => {
 
   return (
     <FormContainer>
-      <Typography variant="h4" fontWeight={600} gutterBottom>
+      <h1 className="text-2xl font-semibold mb-2">
         <FormattedMessage defaultMessage="Choose your transcription setup" />
-      </Typography>
-      <Typography variant="body1" color="text.secondary" mb={4}>
+      </h1>
+      <p className="text-base text-muted-foreground mb-8">
         <FormattedMessage defaultMessage="Decide how Voquill should transcribe your recordings—locally or through an API-powered service." />
-      </Typography>
+      </p>
 
       <AITranscriptionConfiguration hideCloudOption={true} />
 
-      <Stack direction="row" justifyContent="space-between" mt={4} pb={4}>
-        <Button onClick={() => goBackOnboardingPage()}>
+      <div className="flex flex-row justify-between mt-8 pb-8">
+        <Button variant="ghost" onClick={() => goBackOnboardingPage()}>
           <FormattedMessage defaultMessage="Back" />
         </Button>
         <Button
-          variant="contained"
+          variant="primary"
           onClick={() => goToOnboardingPage("postProcessing")}
           disabled={!canContinue}
         >
           <FormattedMessage defaultMessage="Continue" />
         </Button>
-      </Stack>
+      </div>
     </FormContainer>
   );
 };

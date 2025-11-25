@@ -1,5 +1,4 @@
-import { ArrowForward } from "@mui/icons-material";
-import { Button, Card, Stack, Typography } from "@mui/material";
+import { ArrowRight } from "lucide-react";
 import { FormattedMessage } from "react-intl";
 import { invokeHandler } from "@repo/functions";
 import {
@@ -15,6 +14,7 @@ import { useAsyncEffect } from "../../hooks/async.hooks";
 import { useAppStore } from "../../store";
 import { getMyMember } from "../../utils/member.utils";
 import { getPriceIdFromKey } from "../../utils/price.utils";
+import { Button } from "../ui/button";
 import { LoginForm } from "../login/LoginForm";
 import { FormContainer } from "./OnboardingShared";
 
@@ -56,56 +56,59 @@ export const OnboardingLoginForm = () => {
   if (currentUserId) {
     return (
       <FormContainer>
-        <Typography variant="h6" gutterBottom>
+        <h2 className="text-lg font-semibold mb-2">
           <FormattedMessage defaultMessage="You are logged in" />
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
+        </h2>
+        <p className="text-sm text-muted-foreground">
           <FormattedMessage defaultMessage="You haven't completed checkout yet. Click the 'Next' button below to proceed to checkout." />
           <br />
           <br />
           <FormattedMessage defaultMessage="You can always go back if you changed your mind!" />
-        </Typography>
+        </p>
 
-        <Stack direction="row" justifyContent="space-between" mt={4} pb={4}>
-          <Button onClick={() => goBackOnboardingPage()} disabled={loggingIn}>
+        <div className="flex flex-row justify-between mt-8 pb-8">
+          <Button
+            variant="ghost"
+            onClick={() => goBackOnboardingPage()}
+            disabled={loggingIn}
+          >
             <FormattedMessage defaultMessage="Back" />
           </Button>
           <Button
-            variant="contained"
+            variant="primary"
             onClick={handleOpenPaymentDialog}
-            endIcon={<ArrowForward />}
+            icon={<ArrowRight className="h-4 w-4" />}
+            iconPosition="right"
           >
             <FormattedMessage defaultMessage="Next" />
           </Button>
-        </Stack>
+        </div>
       </FormContainer>
     );
   }
 
   return (
     <FormContainer>
-      <Typography variant="h4" fontWeight={600} gutterBottom>
+      <h1 className="text-2xl font-semibold mb-2">
         <FormattedMessage defaultMessage="Sign in to continue" />
-      </Typography>
-      <Typography variant="body1" color="text.secondary" mb={3}>
+      </h1>
+      <p className="text-base text-muted-foreground mb-6">
         <FormattedMessage defaultMessage="We'll connect your account and launch checkout right after you sign in." />
-      </Typography>
+      </p>
 
-      <Card
-        sx={{
-          p: 2,
-          px: 3,
-          flex: "0 0 auto",
-        }}
-      >
+      <div className="p-4 px-6 flex-shrink-0 border rounded-lg bg-card">
         <LoginForm />
-      </Card>
+      </div>
 
-      <Stack direction="row" justifyContent="space-between" mt={4} pb={4}>
-        <Button onClick={() => goBackOnboardingPage()} disabled={loggingIn}>
+      <div className="flex flex-row justify-between mt-8 pb-8">
+        <Button
+          variant="ghost"
+          onClick={() => goBackOnboardingPage()}
+          disabled={loggingIn}
+        >
           <FormattedMessage defaultMessage="Back" />
         </Button>
-      </Stack>
+      </div>
     </FormContainer>
   );
 };

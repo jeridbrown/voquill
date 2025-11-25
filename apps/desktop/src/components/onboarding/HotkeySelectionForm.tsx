@@ -1,5 +1,4 @@
-import { Check } from "@mui/icons-material";
-import { Button, CircularProgress, Stack, Typography } from "@mui/material";
+import { Check } from "lucide-react";
 import { FormattedMessage } from "react-intl";
 import {
   goBackOnboardingPage,
@@ -11,6 +10,8 @@ import {
   getDefaultHotkeyCombosForAction,
 } from "../../utils/keyboard.utils";
 import { getMyMember } from "../../utils/member.utils";
+import { Button } from "../ui/button";
+import { CircularProgress } from "../ui/progress";
 import { HotkeySetting } from "../settings/HotkeySetting";
 import { FormContainer } from "./OnboardingShared";
 
@@ -38,22 +39,17 @@ export const HotkeySelectionForm = () => {
 
   return (
     <FormContainer>
-      <Typography variant="h4" fontWeight={600} gutterBottom>
+      <h1 className="text-2xl font-semibold mb-2">
         <FormattedMessage defaultMessage="Choose your dictation shortcut" />
-      </Typography>
-      <Typography variant="body1" color="text.secondary" mb={4}>
+      </h1>
+      <p className="text-base text-muted-foreground mb-8">
         <FormattedMessage defaultMessage="Pick the keys you'll press to start and stop dictation anywhere. You can change this anytime from settings." />
-      </Typography>
+      </p>
 
       {status === "loading" ? (
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ py: 4 }}
-        >
-          <CircularProgress size={24} />
-        </Stack>
+        <div className="flex flex-row justify-center items-center py-8">
+          <CircularProgress size="sm" />
+        </div>
       ) : (
         <HotkeySetting
           title="Start/stop dictating"
@@ -63,11 +59,12 @@ export const HotkeySelectionForm = () => {
         />
       )}
 
-      <Stack direction="row" justifyContent="space-between" mt={4} pb={4}>
+      <div className="flex flex-row justify-between mt-8 pb-8">
         {hideBackButton ? (
           <div />
         ) : (
           <Button
+            variant="ghost"
             onClick={() => goBackOnboardingPage()}
             disabled={status === "loading"}
           >
@@ -75,14 +72,15 @@ export const HotkeySelectionForm = () => {
           </Button>
         )}
         <Button
-          variant="contained"
-          endIcon={<Check />}
+          variant="primary"
           onClick={handleFinish}
           disabled={submitting || !canFinish}
+          icon={<Check className="h-4 w-4" />}
+          iconPosition="right"
         >
           <FormattedMessage defaultMessage="Finish" />
         </Button>
-      </Stack>
+      </div>
     </FormContainer>
   );
 };

@@ -1,11 +1,12 @@
-import { ArrowForward } from "@mui/icons-material";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { ArrowRight } from "lucide-react";
 import { FormattedMessage, useIntl } from "react-intl";
 import {
   goBackOnboardingPage,
   goToOnboardingPage,
 } from "../../actions/onboarding.actions";
 import { produceAppState, useAppStore } from "../../store";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { FormContainer } from "./OnboardingShared";
 
 export const NameForm = () => {
@@ -31,39 +32,35 @@ export const NameForm = () => {
 
   return (
     <FormContainer>
-      <Typography variant="h4" fontWeight={600} gutterBottom>
+      <h1 className="text-2xl font-semibold mb-2">
         <FormattedMessage defaultMessage="What's your name?" />
-      </Typography>
-      <Typography variant="body1" color="text.secondary" mb={4}>
+      </h1>
+      <p className="text-base text-muted-foreground mb-8">
         <FormattedMessage defaultMessage="This will be used in things like email signatures and stuff." />
-      </Typography>
-      <TextField
-        variant="outlined"
+      </p>
+      <Input
         placeholder={intl.formatMessage({ defaultMessage: "Full name" })}
         value={name}
         onChange={handleChange}
         onBlur={handleBlur}
         autoFocus
         autoComplete="name"
-        slotProps={{
-          htmlInput: {
-            "data-voquill-ignore": "true",
-          },
-        }}
+        data-voquill-ignore="true"
       />
-      <Stack direction="row" justifyContent="space-between" mt={4}>
-        <Button onClick={() => goBackOnboardingPage()}>
+      <div className="flex flex-row justify-between mt-8">
+        <Button variant="ghost" onClick={() => goBackOnboardingPage()}>
           <FormattedMessage defaultMessage="Back" />
         </Button>
         <Button
-          variant="contained"
+          variant="primary"
           disabled={!name || submitting}
-          endIcon={<ArrowForward />}
           onClick={handleContinue}
+          icon={<ArrowRight className="h-4 w-4" />}
+          iconPosition="right"
         >
           <FormattedMessage defaultMessage="Continue" />
         </Button>
-      </Stack>
+      </div>
     </FormContainer>
   );
 };

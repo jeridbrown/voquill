@@ -37,23 +37,30 @@ LinearProgress.displayName = "LinearProgress";
 // Circular Progress Component
 interface CircularProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: number;
-  size?: number;
+  size?: number | "sm" | "md" | "lg";
   strokeWidth?: number;
   indeterminate?: boolean;
 }
+
+const sizeMap = {
+  sm: 24,
+  md: 40,
+  lg: 56,
+};
 
 const CircularProgress = React.forwardRef<HTMLDivElement, CircularProgressProps>(
   (
     {
       className,
       value,
-      size = 40,
+      size: sizeProp = 40,
       strokeWidth = 4,
       indeterminate = true,
       ...props
     },
     ref
   ) => {
+    const size = typeof sizeProp === "string" ? sizeMap[sizeProp] : sizeProp;
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = indeterminate

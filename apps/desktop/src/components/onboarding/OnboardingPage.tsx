@@ -1,4 +1,3 @@
-import { Stack } from "@mui/material";
 import { useEffect } from "react";
 import { loadPrices } from "../../actions/pricing.actions";
 import { produceAppState, useAppStore } from "../../store";
@@ -27,12 +26,7 @@ export default function OnboardingPage() {
   }, []);
 
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ height: "100%", pb: 4 }}
-    >
+    <div className="flex flex-row items-center justify-center h-full pb-4">
       {currentPage === "welcome" && <WelcomeForm />}
       {currentPage === "name" && <NameForm />}
       {currentPage === "plan" && <PlanSelectionForm />}
@@ -40,6 +34,6 @@ export default function OnboardingPage() {
       {currentPage === "transcription" && <TranscriptionMethodForm />}
       {currentPage === "postProcessing" && <PostProcessingMethodForm />}
       {currentPage === "hotkeys" && <HotkeySelectionForm />}
-    </Stack>
+    </div>
   );
 }
