@@ -1,4 +1,3 @@
-import { Box, Stack, Typography } from "@mui/material";
 import { MemberPlan } from "@repo/types";
 import { useEffect } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -46,55 +45,46 @@ export default function PricingPage() {
   let subtitle: React.ReactNode;
   if (onboarded) {
     title = <FormattedMessage defaultMessage="Upgrade your plan" />;
-    subtitle = <FormattedMessage defaultMessage="Get access to the full feature set by upgrading your plan." />;
+    subtitle = (
+      <FormattedMessage defaultMessage="Get access to the full feature set by upgrading your plan." />
+    );
   } else {
     title = <FormattedMessage defaultMessage="Try it free. Upgrade anytime." />;
-    subtitle = <FormattedMessage defaultMessage="No credit card required. Get started today and upgrade when you're ready." />;
+    subtitle = (
+      <FormattedMessage defaultMessage="No credit card required. Get started today and upgrade when you're ready." />
+    );
   }
 
   const plans = (
-    <Stack
-      sx={{
-        justifyContent: "center",
-        alignItems: "center",
-        p: 4,
-        pb: 16,
-        gap: 1,
-        minHeight: "80vh",
-      }}
-    >
-      <Typography variant="h4" textAlign="center">
-        {title}
-      </Typography>
-      <Typography variant="body1" color="text.secondary" textAlign="center">
-        {subtitle}
-      </Typography>
+    <div className="flex flex-col justify-center items-center p-8 pb-32 gap-2 min-h-[80vh]">
+      <h1 className="text-2xl font-bold text-center">{title}</h1>
+      <p className="text-base text-muted-foreground text-center">{subtitle}</p>
       <PlanList
         onSelect={handleClickPlan}
-        text={onboarded ? intl.formatMessage({ defaultMessage: "Subscribe" }) : intl.formatMessage({ defaultMessage: "Continue" })}
-        sx={{
-          mt: 4,
-          mb: 2,
-        }}
+        text={
+          onboarded
+            ? intl.formatMessage({ defaultMessage: "Subscribe" })
+            : intl.formatMessage({ defaultMessage: "Continue" })
+        }
+        className="mt-8 mb-4"
       />
-    </Stack>
+    </div>
   );
 
   return (
-    <Stack sx={{ pb: 16 }}>
+    <div className="flex flex-col pb-32">
       <Liquid duration={80}>
-        <Box
-          sx={{
-            background: (t) =>
-              `radial-gradient(circle, ${t.palette.background.default} 10%, transparent 100%)`,
+        <div
+          className="bg-gradient-radial from-background via-background/80 to-transparent"
+          style={{
             backgroundSize: "100% 100%",
             backgroundPosition: "center",
           }}
         >
           {plans}
-        </Box>
+        </div>
       </Liquid>
-      <Faq sx={{ mt: 2, mb: 2 }} />
-    </Stack>
+      <Faq className="mt-4 mb-4" />
+    </div>
   );
 }

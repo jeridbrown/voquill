@@ -28,7 +28,7 @@ export const PlanSelectionForm = () => {
         onSelect={handleSelectPlan}
         text="Continue"
         ignoreCurrentPlan
-        sx={{ width: "100%" }}
+        className="w-full"
       />
 
       <div className="flex flex-row justify-start mt-8 pb-8">
