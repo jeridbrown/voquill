@@ -1,36 +1,31 @@
-import { Container, Stack, type ContainerProps } from "@mui/material";
+import { cn } from "../ui/utils/cn";
 
 export type DashboardEntryLayoutProps = {
   children: React.ReactNode;
-  maxWidth?: ContainerProps["maxWidth"];
+  maxWidth?: "sm" | "md" | "lg" | "xl";
 };
+
+const maxWidthMap = {
+  sm: "max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-lg",
+  xl: "max-w-xl",
+};
+
 export const DashboardEntryLayout = ({
   children,
   maxWidth = "sm",
 }: DashboardEntryLayoutProps) => {
   return (
-    <Stack
-      sx={{
-        flexGrow: 1,
-        flexShrink: 1,
-        minHeight: 0,
-        overflowY: "auto",
-        overflowX: "hidden",
-        pr: 2,
-      }}
-    >
-      <Container
-        maxWidth={maxWidth}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          pt: 1,
-          pb: 8,
-          width: "100%",
-        }}
+    <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-4">
+      <div
+        className={cn(
+          "flex flex-col pt-2 pb-16 w-full mx-auto",
+          maxWidthMap[maxWidth]
+        )}
       >
         {children}
-      </Container>
-    </Stack>
+      </div>
+    </div>
   );
 };

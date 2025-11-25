@@ -22,13 +22,8 @@
     "i18n": "npm run i18n:extract && npm run i18n:sync"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.5",
     "@headlessui/react": "^2.2.9",
-    "@mui/icons-material": "^7.1.0",
-    "@mui/lab": "^7.0.0-beta.14",
-    "@mui/material": "^7.1.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-popover": "^1.1.15",
