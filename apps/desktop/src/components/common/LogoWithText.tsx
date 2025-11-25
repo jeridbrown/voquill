@@ -1,31 +1,22 @@
-import { Stack, Typography, type StackProps } from "@mui/material";
+import { cn } from "../ui/utils/cn";
 import { Logo } from "./Logo";
 
-export type LogoWithTextProps = StackProps;
+export type LogoWithTextProps = {
+  className?: string;
+};
 
-export const LogoWithText = ({ sx, ...rest }: LogoWithTextProps) => {
+export const LogoWithText = ({ className }: LogoWithTextProps) => {
   return (
-    <Stack
-      direction="row"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        userSelect: "none",
-        ...sx,
-      }}
-      {...rest}
+    <div
+      className={cn(
+        "flex flex-row items-center select-none",
+        className
+      )}
     >
-      <Logo sx={{ mr: 1 }} />
-      <Typography
-        variant="h5"
-        fontWeight="bold"
-        sx={{
-          userSelect: "none",
-          display: { xs: "none", sm: "block" },
-        }}
-      >
+      <Logo className="mr-2" />
+      <span className="text-xl font-bold select-none hidden sm:block">
         Voquill
-      </Typography>
-    </Stack>
+      </span>
+    </div>
   );
 };

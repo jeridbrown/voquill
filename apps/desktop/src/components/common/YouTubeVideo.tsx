@@ -1,16 +1,13 @@
-import { Box, type BoxProps } from "@mui/material";
+import { cn } from "../ui/utils/cn";
 
 type YouTubeVideoProps = {
   videoId: string;
   title?: string;
-  /**
-   * Supports optional YouTube player parameters.
-   * Only the most common ones are exposed for now.
-   */
   autoplay?: boolean;
   startSeconds?: number;
   aspectRatio?: number;
-} & BoxProps;
+  className?: string;
+};
 
 /**
  * Responsive embedded YouTube video that can be dropped into any layout.
@@ -21,8 +18,7 @@ export function YouTubeVideo({
   autoplay = false,
   startSeconds,
   aspectRatio = 16 / 9,
-  sx,
-  ...boxProps
+  className,
 }: YouTubeVideoProps) {
   const params = new URLSearchParams({
     rel: "0",
@@ -43,32 +39,18 @@ export function YouTubeVideo({
   const src = `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 
   return (
-    <Box
-      {...boxProps}
-      sx={{
-        position: "relative",
-        width: "100%",
-        pt: `${100 / safeAspectRatio}%`,
-        ...sx,
-      }}
+    <div
+      className={cn("relative w-full", className)}
+      style={{ paddingTop: `${100 / safeAspectRatio}%` }}
     >
-      <Box
-        component="iframe"
+      <iframe
         src={src}
         title={title}
         loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
-        sx={{
-          border: 0,
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          borderRadius: 2,
-          boxShadow: 3,
-        }}
+        className="absolute inset-0 w-full h-full rounded-lg shadow-lg border-0"
       />
-    </Box>
+    </div>
   );
 }

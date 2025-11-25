@@ -1,18 +1,23 @@
-import { Box, Fade, Zoom } from "@mui/material";
+import { cn } from "../ui/utils/cn";
 
 export type AnimateInProps = {
-	children: React.ReactElement<unknown, any>;
-	visible?: boolean;
+  children: React.ReactElement<unknown>;
+  visible?: boolean;
 };
 
 export const AnimateIn = ({ children, visible = true }: AnimateInProps) => {
-	return (
-		<Fade in={visible} timeout={300} unmountOnExit>
-			<Box>
-				<Zoom in={visible} timeout={200}>
-					<div style={{ display: visible ? "block" : "none" }}>{children}</div>
-				</Zoom>
-			</Box>
-		</Fade>
-	);
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <div
+      className={cn(
+        "animate-in fade-in zoom-in-95 duration-300",
+        !visible && "hidden"
+      )}
+    >
+      {children}
+    </div>
+  );
 };

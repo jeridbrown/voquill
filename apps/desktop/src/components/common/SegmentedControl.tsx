@@ -1,5 +1,4 @@
-import { Box, Tab, Tabs } from "@mui/material";
-import { SyntheticEvent } from "react";
+import { cn } from "../ui/utils/cn";
 
 export type SegmentedControlOption<Value extends string> = {
   value: Value;
@@ -14,48 +13,13 @@ export type SegmentedControlProps<Value extends string> = {
   ariaLabel?: string;
 };
 
-const tabSx = {
-  textTransform: "none",
-  minHeight: "unset",
-  py: 1.25,
-  px: 2.5,
-  borderRadius: 1.5,
-  fontWeight: 600,
-  transition: "all 0.2s ease",
-  color: "text.secondary",
-  "&.Mui-selected": {
-    color: "text.primary",
-    bgcolor: "background.paper",
-    boxShadow:
-      "inset 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.05)",
-  },
-  "&:hover:not(.Mui-selected)": {
-    color: "text.primary",
-    bgcolor: "rgba(255,255,255,0.05)",
-  },
-};
-
 export const SegmentedControl = <Value extends string>({
   value,
   options,
   onChange,
   ariaLabel,
 }: SegmentedControlProps<Value>) => {
-  const activeIndexCandidate = options.findIndex(
-    (option) => option.value === value && !option.disabled,
-  );
-  const fallbackIndex = options.findIndex((option) => !option.disabled);
-  const activeIndex =
-    activeIndexCandidate >= 0
-      ? activeIndexCandidate
-      : Math.max(0, fallbackIndex);
-
-  const handleChange = (_event: SyntheticEvent, index: number) => {
-    const option = options[index];
-    if (!option) {
-      return;
-    }
-
+  const handleClick = (option: SegmentedControlOption<Value>) => {
     if (option.disabled) {
       return;
     }
@@ -66,37 +30,33 @@ export const SegmentedControl = <Value extends string>({
   };
 
   return (
-    <Box
-      sx={{
-        display: "inline-flex",
-        bgcolor: "action.hover",
-        borderRadius: 2,
-        p: 0.5,
-        border: 1,
-        borderColor: "divider",
-        maxWidth: "100%",
-      }}
+    <div
+      className="inline-flex bg-muted/50 rounded-lg p-0.5 border border-border max-w-full"
+      role="tablist"
+      aria-label={ariaLabel}
     >
-      <Tabs
-        value={activeIndex}
-        onChange={handleChange}
-        aria-label={ariaLabel}
-        sx={{
-          minHeight: "unset",
-          "& .MuiTabs-indicator": {
-            display: "none",
-          },
-        }}
-      >
-        {options.map((option) => (
-          <Tab
+      {options.map((option) => {
+        const isSelected = option.value === value;
+        return (
+          <button
             key={option.value}
-            label={option.label}
-            sx={tabSx}
+            type="button"
+            role="tab"
+            aria-selected={isSelected}
             disabled={option.disabled}
-          />
-        ))}
-      </Tabs>
-    </Box>
+            onClick={() => handleClick(option)}
+            className={cn(
+              "px-4 py-2 text-sm font-semibold rounded-md transition-all duration-200",
+              "disabled:opacity-50 disabled:cursor-not-allowed",
+              isSelected
+                ? "bg-background text-foreground shadow-[inset_0_1px_3px_rgba(0,0,0,0.2),0_1px_2px_rgba(0,0,0,0.05)]"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            )}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
   );
 };

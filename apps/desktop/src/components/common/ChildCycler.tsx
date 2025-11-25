@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import React, {
   type ReactNode,
   useLayoutEffect,
@@ -51,35 +50,29 @@ export const ChildCycler = ({
   const nextIndex = (index + 1) % childArray.length;
 
   return (
-    <Box
-      sx={{
-        position: "relative",
+    <div
+      className="relative overflow-hidden"
+      style={{
         width: dims.w ? `${dims.w}px` : undefined,
         height: dims.h ? `${dims.h}px` : undefined,
         transition: `width ${transitionDuration}ms ease, height ${transitionDuration}ms ease`,
-        overflow: "hidden",
       }}
     >
-      <Box
+      <div
         ref={wrapperRef}
-        sx={{
+        style={{
           opacity: fading ? 0 : 1,
           transition: `opacity ${transitionDuration}ms ease`,
         }}
       >
         {childArray[index]}
-      </Box>
-      <Box
+      </div>
+      <div
         ref={sizerRef}
-        sx={{
-          position: "absolute",
-          visibility: "hidden",
-          top: 0,
-          left: 0,
-        }}
+        className="absolute invisible top-0 left-0"
       >
         {childArray[nextIndex]}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
