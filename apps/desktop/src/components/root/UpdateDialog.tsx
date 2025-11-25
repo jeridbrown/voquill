@@ -1,25 +1,23 @@
-import { ArrowUpwardOutlined } from "@mui/icons-material";
-import {
-  Alert,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  LinearProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { ArrowUp } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import Markdown from "react-markdown";
+import { FormattedMessage, useIntl } from "react-intl";
 import {
   dismissUpdateDialog,
   installAvailableUpdate,
 } from "../../actions/updater.actions";
 import { useAppStore } from "../../store";
 import { formatSize } from "../../utils/format.utils";
-import { FormattedMessage, useIntl } from "react-intl";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { LinearProgress } from "../ui/progress";
 
 const formatReleaseDate = (isoDate: string | null) => {
   if (!isoDate) {
@@ -126,102 +124,95 @@ export const UpdateDialog = () => {
   return (
     <Dialog
       open={dialogOpen}
-      onClose={(_, __) => {
-        if (!isUpdating) {
-          handleClose();
-        }
-      }}
-      fullWidth
-      maxWidth="sm"
-      disableEscapeKeyDown={isUpdating}
+      onOpenChange={(isOpen) => !isOpen && !isUpdating && handleClose()}
     >
-      <DialogTitle>
-        <FormattedMessage defaultMessage="Update available" />
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={2} sx={{ mt: 1 }}>
-          <Stack spacing={0.5}>
-            <Typography variant="body1" fontWeight={600}>
-              {readyToInstallLabel}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>
+            <FormattedMessage defaultMessage="Update available" />
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-base font-semibold">{readyToInstallLabel}</p>
+            <p className="text-sm text-muted-foreground">
               {currentVersionDescription}
-            </Typography>
+            </p>
             {formattedDate && (
-              <Typography variant="caption" color="text.secondary">
+              <p className="text-xs text-muted-foreground">
                 <FormattedMessage
                   defaultMessage="Released on {date}"
                   values={{ date: formattedDate }}
                 />
-              </Typography>
+              </p>
             )}
-          </Stack>
+          </div>
 
           {releaseNotes && (
-            <Stack spacing={1}>
-              <Typography variant="body1">
+            <div className="flex flex-col gap-2">
+              <p className="text-base">
                 <FormattedMessage defaultMessage="What's new" />
-              </Typography>
-              <Markdown>{releaseNotes}</Markdown>
-            </Stack>
+              </p>
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <Markdown>{releaseNotes}</Markdown>
+              </div>
+            </div>
           )}
 
           {showProgress && (
-            <Stack spacing={1}>
+            <div className="flex flex-col gap-2">
               <LinearProgress
-                variant={percent != null ? "determinate" : "indeterminate"}
                 value={percent ?? undefined}
+                indeterminate={percent == null}
               />
-              <Stack direction="row" spacing={1} justifyContent="space-between">
-                <Typography variant="caption" color="text.secondary">
+              <div className="flex flex-row gap-2 justify-between">
+                <span className="text-xs text-muted-foreground">
                   {status === "installing" ? (
                     <FormattedMessage defaultMessage="Installing update..." />
                   ) : (
                     <FormattedMessage defaultMessage="Downloading update..." />
                   )}
-                </Typography>
+                </span>
                 {progressLabel && (
-                  <Typography variant="caption" color="text.secondary">
+                  <span className="text-xs text-muted-foreground">
                     {progressLabel}
                     {percent != null ? ` (${percent}%)` : ""}
-                  </Typography>
+                  </span>
                 )}
-              </Stack>
-            </Stack>
+              </div>
+            </div>
           )}
 
           {status === "installing" && (
-            <Alert severity="info" variant="outlined">
-              <FormattedMessage defaultMessage="Installation in progress. Voquill may restart automatically when finished." />
+            <Alert variant="info">
+              <AlertDescription>
+                <FormattedMessage defaultMessage="Installation in progress. Voquill may restart automatically when finished." />
+              </AlertDescription>
             </Alert>
           )}
 
           {status === "error" && errorMessage && (
-            <Alert severity="error" variant="outlined">
-              {errorMessage}
+            <Alert variant="error">
+              <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
-        </Stack>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={handleClose} disabled={isUpdating}>
+            <FormattedMessage defaultMessage="Later" />
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleInstall}
+            disabled={isUpdating}
+            loading={isUpdating}
+            icon={<ArrowUp className="h-4 w-4" />}
+            iconPosition="right"
+          >
+            <FormattedMessage defaultMessage="Update" />
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} disabled={isUpdating}>
-          <FormattedMessage defaultMessage="Later" />
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleInstall}
-          disabled={isUpdating}
-          endIcon={
-            isUpdating ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : (
-              <ArrowUpwardOutlined />
-            )
-          }
-        >
-          <FormattedMessage defaultMessage="Update" />
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

@@ -1,17 +1,9 @@
-import { Box, CircularProgress } from "@mui/material";
+import { CircularProgress } from "../ui/progress";
 
 export const LoadingApp = () => {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="w-full h-full flex justify-center items-center">
       <CircularProgress />
-    </Box>
+    </div>
   );
 };
