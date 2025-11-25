@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import {
   availableMonitors,
   currentMonitor,
@@ -139,32 +138,17 @@ export const OverlayRend = () => {
   }
 
   return (
-    <Box
-      sx={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        pointerEvents: "none",
-        backgroundColor: "transparent",
-      }}
-    >
-      <Box
-        sx={{
-          marginTop: `${TOP_MARGIN}px`,
-          width: `${OVERLAY_WIDTH}px`,
-          height: `${OVERLAY_HEIGHT}px`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+    <div className="fixed inset-0 flex justify-center items-start pointer-events-none bg-transparent">
+      <div
+        className="flex items-center justify-center"
+        style={{
+          marginTop: TOP_MARGIN,
+          width: OVERLAY_WIDTH,
+          height: OVERLAY_HEIGHT,
         }}
       >
         <RecordingStatusWidget />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
