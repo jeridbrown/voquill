@@ -1,14 +1,13 @@
 import {
-  ClassOutlined,
-  HistoryOutlined,
-  HomeOutlined,
-  PaletteOutlined,
-  SettingsOutlined,
-} from "@mui/icons-material";
-import { Box, List, Stack } from "@mui/material";
+  BookOpen,
+  History,
+  Home,
+  Palette,
+  Settings,
+} from "lucide-react";
 import { FormattedMessage } from "react-intl";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ListTile } from "../common/ListTile";
+import { ListTile } from "../common/ListTileNew";
 
 const settingsPath = "/dashboard/settings";
 
@@ -22,22 +21,22 @@ const navItems: NavItem[] = [
   {
     label: <FormattedMessage defaultMessage="Home" />,
     path: "/dashboard",
-    icon: <HomeOutlined />,
+    icon: <Home className="h-5 w-5" />,
   },
   {
     label: <FormattedMessage defaultMessage="History" />,
     path: "/dashboard/transcriptions",
-    icon: <HistoryOutlined />,
+    icon: <History className="h-5 w-5" />,
   },
   {
     label: <FormattedMessage defaultMessage="Dictionary" />,
     path: "/dashboard/dictionary",
-    icon: <ClassOutlined />,
+    icon: <BookOpen className="h-5 w-5" />,
   },
   {
     label: <FormattedMessage defaultMessage="Styles" />,
     path: "/dashboard/styling",
-    icon: <PaletteOutlined />,
+    icon: <Palette className="h-5 w-5" />,
   },
 ];
 
@@ -55,12 +54,7 @@ export const DashboardMenu = ({ onChoose }: DashboardMenuProps) => {
   };
 
   const list = (
-    <List
-      sx={{
-        px: 2,
-        pb: 8,
-      }}
-    >
+    <div className="px-4 pb-8">
       {navItems.map(({ label, path, icon }) => (
         <ListTile
           key={path}
@@ -70,21 +64,21 @@ export const DashboardMenu = ({ onChoose }: DashboardMenuProps) => {
           title={label}
         />
       ))}
-    </List>
+    </div>
   );
 
   return (
-    <Stack alignItems="stretch" sx={{ height: "100%" }}>
-      <Box sx={{ flexGrow: 1, overflowY: "auto" }}>{list}</Box>
-      <Box sx={{ mt: 2, p: 2 }}>
+    <div className="flex flex-col items-stretch h-full">
+      <div className="flex-grow overflow-y-auto">{list}</div>
+      <div className="mt-4 p-4">
         <ListTile
           key={settingsPath}
           onClick={() => onChooseHandler(settingsPath)}
           selected={location.pathname === settingsPath}
-          leading={<SettingsOutlined />}
+          leading={<Settings className="h-5 w-5" />}
           title={<FormattedMessage defaultMessage="Settings" />}
         />
-      </Box>
-    </Stack>
+      </div>
+    </div>
   );
 };

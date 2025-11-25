@@ -1,107 +1,78 @@
-import { Box, Fab, Stack, type FabProps } from "@mui/material";
 import React, { useLayoutEffect, useRef, useState } from "react";
+import { cn } from "../ui/utils/cn";
 
-export type AppFabProps = Omit<FabProps, "variant"> & {
-	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-	disabled?: boolean;
-	children?: React.ReactNode;
-	leading?: React.ReactNode;
-	trailing?: React.ReactNode;
-	variant?: "contained" | "outline";
+export type AppFabProps = {
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
+  children?: React.ReactNode;
+  leading?: React.ReactNode;
+  trailing?: React.ReactNode;
+  variant?: "contained" | "outline";
+  className?: string;
 };
 
 export const AppFab = ({
-	onClick,
-	disabled = false,
-	children,
-	leading,
-	trailing,
-	variant = "contained",
-	...muiFabProps
+  onClick,
+  disabled = false,
+  children,
+  leading,
+  trailing,
+  variant = "contained",
+  className,
 }: AppFabProps) => {
-	const isOutline = variant === "outline";
+  const isOutline = variant === "outline";
 
-	const labelRef = useRef<HTMLDivElement>(null);
-	const [labelWidth, setLabelWidth] = useState<number>();
+  const labelRef = useRef<HTMLDivElement>(null);
+  const [labelWidth, setLabelWidth] = useState<number>();
 
-	useLayoutEffect(() => {
-		if (!labelRef.current) {
-			return;
-		}
+  useLayoutEffect(() => {
+    if (!labelRef.current) {
+      return;
+    }
 
-		const update = () => setLabelWidth(labelRef.current!.offsetWidth);
+    const update = () => setLabelWidth(labelRef.current!.offsetWidth);
 
-		update();
-		const ro = new ResizeObserver(update);
-		ro.observe(labelRef.current);
-		return () => ro.disconnect();
-	}, [children, leading, trailing]);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(labelRef.current);
+    return () => ro.disconnect();
+  }, [children, leading, trailing]);
 
-	return (
-		<Fab
-			{...muiFabProps}
-			variant="extended"
-			onClick={onClick}
-			disabled={disabled}
-			sx={{
-				width: labelWidth,
-				transition: (theme) =>
-					theme.transitions.create("width", {
-						easing: theme.transitions.easing.easeInOut,
-						duration: theme.transitions.duration.shortest,
-					}),
-				overflow: "hidden",
-				border: isOutline ? "1px solid currentColor" : "none",
-				backgroundColor: isOutline ? "background.paper" : "primary.main",
-				color: isOutline ? "primary.main" : "primary.contrastText",
-				"&:hover": {
-					backgroundColor: (theme) =>
-						isOutline
-							? theme.vars?.palette.action.hover
-							: theme.vars?.palette.primary.light,
-				},
-			}}
-		>
-			<Stack
-				ref={labelRef}
-				direction="row"
-				alignItems="center"
-				spacing={1}
-				px={2}
-				whiteSpace="nowrap"
-			>
-				{leading && (
-					<Box component="span" display="flex">
-						{leading}
-					</Box>
-				)}
-				<Box flexShrink={0}>{children}</Box>
-				{trailing && (
-					<Box component="span" display="flex">
-						{trailing}
-					</Box>
-				)}
-			</Stack>
-		</Fab>
-	);
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={cn(
+        "rounded-full px-4 py-3 font-medium shadow-lg transition-all duration-150 overflow-hidden inline-flex items-center justify-center",
+        isOutline
+          ? "border border-current bg-background text-primary hover:bg-muted"
+          : "bg-primary text-primary-foreground hover:bg-primary/90",
+        disabled && "opacity-50 cursor-not-allowed",
+        className
+      )}
+      style={{ width: labelWidth }}
+    >
+      <div
+        ref={labelRef}
+        className="flex flex-row items-center gap-2 px-2 whitespace-nowrap"
+      >
+        {leading && <span className="flex">{leading}</span>}
+        <span className="shrink-0">{children}</span>
+        {trailing && <span className="flex">{trailing}</span>}
+      </div>
+    </button>
+  );
 };
 
 export type AppFabPositionProps = {
-	children?: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 export const AppFabPosition = ({ children }: AppFabPositionProps) => {
-	return (
-		<Stack
-			position="absolute"
-			bottom={32}
-			right={32}
-			direction="row"
-			justifyContent="flex-end"
-			alignItems="center"
-			spacing={2}
-		>
-			{children}
-		</Stack>
-	);
+  return (
+    <div className="absolute bottom-8 right-8 flex flex-row justify-end items-center gap-4">
+      {children}
+    </div>
+  );
 };

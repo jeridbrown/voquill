@@ -1,4 +1,3 @@
-import { Dialog } from "@mui/material";
 import { invokeHandler } from "@repo/functions";
 import { delayed, retry } from "@repo/utilities";
 import {
@@ -11,6 +10,7 @@ import { useCallback } from "react";
 import { useOnExit } from "../../hooks/helper.hooks";
 import { produceAppState, useAppStore } from "../../store";
 import { registerMembers } from "../../utils/app.utils";
+import { Dialog, DialogContent } from "../ui/dialog";
 
 export const PaymentDialog = () => {
   const open = useAppStore((state) => state.payment.open);
@@ -71,19 +71,21 @@ export const PaymentDialog = () => {
   });
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      {priceId && (
-        <EmbeddedCheckoutProvider
-          key={priceId}
-          stripe={stripe}
-          options={{
-            fetchClientSecret,
-            onComplete: handleComplete,
-          }}
-        >
-          <EmbeddedCheckout />
-        </EmbeddedCheckoutProvider>
-      )}
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+      <DialogContent className="max-w-sm p-0">
+        {priceId && (
+          <EmbeddedCheckoutProvider
+            key={priceId}
+            stripe={stripe}
+            options={{
+              fetchClientSecret,
+              onComplete: handleComplete,
+            }}
+          >
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        )}
+      </DialogContent>
     </Dialog>
   );
 };

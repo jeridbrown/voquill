@@ -1,23 +1,3 @@
-import { LoadingButton } from "@mui/lab";
-import {
-  Alert,
-  Box,
-  Button,
-  Chip,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { Nullable } from "@repo/types";
 import { invoke } from "@tauri-apps/api/core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -25,9 +5,29 @@ import { FormattedMessage } from "react-intl";
 import { setPreferredMicrophone } from "../../actions/user.actions";
 import { useMyUser } from "../../hooks/user.hooks";
 import { produceAppState, useAppStore } from "../../store";
-import { AudioWaveform } from "../common/AudioWaveform";
-import { SettingSection } from "../common/SettingSection";
 import { buildWaveFile, ensureFloat32Array } from "../../utils/audio.utils";
+import { AudioWaveform } from "../common/AudioWaveform";
+import { SettingSection } from "../common/SettingSectionNew";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { CircularProgress } from "../ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const AUTO_OPTION_VALUE = "__microphone_auto__";
 
@@ -213,8 +213,7 @@ export const MicrophoneDialog = () => {
   const selectValue = selected ?? AUTO_OPTION_VALUE;
 
   const handleSelectChange = useCallback(
-    (event: SelectChangeEvent<string>) => {
-      const value = event.target.value;
+    (value: string) => {
       const normalized = value === AUTO_OPTION_VALUE ? null : value;
       setSelected(normalized);
       setHasChanges((normalized ?? null) !== (savedPreference ?? null));
@@ -387,146 +386,139 @@ export const MicrophoneDialog = () => {
   const disableStopButton = isTestStopping;
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>
-        <FormattedMessage defaultMessage="Microphone settings" />
-      </DialogTitle>
-      <DialogContent dividers>
-        <Stack spacing={3} sx={{ paddingTop: 0.5 }}>
-          <Stack spacing={1.5}>
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>
+            <FormattedMessage defaultMessage="Microphone settings" />
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-6 py-4 border-t border-b">
+          <div className="flex flex-col gap-3">
             <SettingSection
               title={<FormattedMessage defaultMessage="Preferred microphone" />}
-              description={<FormattedMessage defaultMessage="Choose which microphone Voquill should use when recording. Automatic picks the best available device each time." />}
-              sx={{ pb: 0.5 }}
+              description={
+                <FormattedMessage defaultMessage="Choose which microphone Voquill should use when recording. Automatic picks the best available device each time." />
+              }
             />
-            <FormControl fullWidth size="small" disabled={loadingDevices}>
-              <InputLabel id="microphone-select-label">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="microphone-select">
                 <FormattedMessage defaultMessage="Microphone" />
-              </InputLabel>
+              </Label>
               <Select
-                labelId="microphone-select-label"
                 value={selectValue}
-                label={<FormattedMessage defaultMessage="Microphone" />}
-                onChange={handleSelectChange}
+                onValueChange={handleSelectChange}
+                disabled={loadingDevices}
               >
-                <MenuItem value={AUTO_OPTION_VALUE}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={1}
-                  >
-                    <Typography>
-                      <FormattedMessage defaultMessage="Automatic" />
-                    </Typography>
-                    <Chip
-                      size="small"
-                      label={<FormattedMessage defaultMessage="Recommended" />}
-                      color="primary"
-                      variant="filled"
-                    />
-                  </Stack>
-                </MenuItem>
-                <Divider sx={{ my: 0.5 }} />
-                {deviceOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      justifyContent="space-between"
-                      width="100%"
-                    >
-                      <Box>
-                        <Typography>{option.label}</Typography>
-                        {option.unavailable ? (
-                          <Typography variant="caption" color="warning.main">
-                            <FormattedMessage defaultMessage="Currently unavailable" />
-                          </Typography>
-                        ) : option.caution ? (
-                          <Typography variant="caption" color="text.secondary">
-                            <FormattedMessage defaultMessage="May provide lower audio quality" />
-                          </Typography>
-                        ) : null}
-                      </Box>
-                      <Stack direction="row" spacing={0.75} alignItems="center">
-                        {option.isDefault && (
-                          <Chip
-                            size="small"
-                            label={<FormattedMessage defaultMessage="Default" />}
-                            color="primary"
-                            variant="outlined"
-                          />
-                        )}
-                        {option.caution && !option.unavailable && (
-                          <Chip
-                            size="small"
-                            label={<FormattedMessage defaultMessage="Caution" />}
-                            color="warning"
-                            variant="outlined"
-                          />
-                        )}
-                      </Stack>
-                    </Stack>
-                  </MenuItem>
-                ))}
+                <SelectTrigger id="microphone-select">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={AUTO_OPTION_VALUE}>
+                    <div className="flex flex-row justify-between items-center gap-2 w-full">
+                      <span>
+                        <FormattedMessage defaultMessage="Automatic" />
+                      </span>
+                      <Badge variant="default">
+                        <FormattedMessage defaultMessage="Recommended" />
+                      </Badge>
+                    </div>
+                  </SelectItem>
+                  <SelectSeparator />
+                  {deviceOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex flex-row justify-between gap-4 w-full">
+                        <div>
+                          <div>{option.label}</div>
+                          {option.unavailable ? (
+                            <div className="text-xs text-yellow-600">
+                              <FormattedMessage defaultMessage="Currently unavailable" />
+                            </div>
+                          ) : option.caution ? (
+                            <div className="text-xs text-muted-foreground">
+                              <FormattedMessage defaultMessage="May provide lower audio quality" />
+                            </div>
+                          ) : null}
+                        </div>
+                        <div className="flex flex-row gap-1.5 items-center">
+                          {option.isDefault && (
+                            <Badge variant="outline">
+                              <FormattedMessage defaultMessage="Default" />
+                            </Badge>
+                          )}
+                          {option.caution && !option.unavailable && (
+                            <Badge
+                              variant="outline"
+                              className="border-yellow-500 text-yellow-600"
+                            >
+                              <FormattedMessage defaultMessage="Caution" />
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
-            </FormControl>
-            <Stack direction="row" spacing={1} alignItems="center">
+            </div>
+            <div className="flex flex-row gap-2 items-center">
               <Button
-                variant="text"
+                variant="ghost"
                 onClick={loadDevices}
-                size="small"
+                size="sm"
                 disabled={loadingDevices}
               >
                 <FormattedMessage defaultMessage="Refresh devices" />
               </Button>
               {loadingDevices && <CircularProgress size={18} />}
-            </Stack>
-            {deviceError && <Alert severity="error">{deviceError}</Alert>}
-            {saveError && <Alert severity="error">{saveError}</Alert>}
-            {saveSuccess && (
-              <Alert severity="success">
-                <FormattedMessage defaultMessage="Preference saved." />
+            </div>
+            {deviceError && (
+              <Alert variant="error">
+                <AlertDescription>{deviceError}</AlertDescription>
               </Alert>
             )}
-          </Stack>
+            {saveError && (
+              <Alert variant="error">
+                <AlertDescription>{saveError}</AlertDescription>
+              </Alert>
+            )}
+            {saveSuccess && (
+              <Alert variant="success">
+                <AlertDescription>
+                  <FormattedMessage defaultMessage="Preference saved." />
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
 
-          <Divider />
+          <hr className="border-border" />
 
-          <Stack spacing={1.5}>
+          <div className="flex flex-col gap-3">
             <SettingSection
               title={<FormattedMessage defaultMessage="Test your microphone" />}
-              description={<FormattedMessage defaultMessage="Start a short test to see live audio levels and play back what was recorded." />}
+              description={
+                <FormattedMessage defaultMessage="Start a short test to see live audio levels and play back what was recorded." />
+              }
             />
-            <Box
-              sx={{
-                position: "relative",
-                width: "100%",
-                height: 96,
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
+            <div className="relative w-full h-24 overflow-hidden flex items-center">
               <AudioWaveform
                 levels={audioLevels}
                 active={isTestRunning}
                 processing={isTestLoading || isTestStopping}
                 style={{ width: "100%", height: "100%" }}
               />
-              <Box
-                sx={(theme) => ({
-                  position: "absolute",
-                  inset: 0,
-                  pointerEvents: "none",
-                  background: `linear-gradient(90deg, ${theme.vars?.palette.level0} 0%, transparent 18%, transparent 82%, ${theme.vars?.palette.level0} 100%)`,
-                })}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(90deg, hsl(var(--background)) 0%, transparent 18%, transparent 82%, hsl(var(--background)) 100%)",
+                }}
               />
-            </Box>
-            <Stack direction="row" spacing={1.5} alignItems="center">
-              <LoadingButton
-                variant={isTestRunning ? "outlined" : "contained"}
-                color={isTestRunning ? "error" : "primary"}
+            </div>
+            <div className="flex flex-row gap-3 items-center">
+              <Button
+                variant={isTestRunning ? "outline" : "primary"}
+                className={isTestRunning ? "text-destructive border-destructive hover:bg-destructive/10" : ""}
                 onClick={
                   isTestRunning ? () => void handleStopTest() : handleStartTest
                 }
@@ -540,9 +532,9 @@ export const MicrophoneDialog = () => {
                 ) : (
                   <FormattedMessage defaultMessage="Start test" />
                 )}
-              </LoadingButton>
+              </Button>
               <Button
-                variant="outlined"
+                variant="outline"
                 disabled={previewUrl == null}
                 onClick={handleTogglePreview}
               >
@@ -552,29 +544,35 @@ export const MicrophoneDialog = () => {
                   <FormattedMessage defaultMessage="Play preview" />
                 )}
               </Button>
-            </Stack>
+            </div>
             {isGlobalRecording && (
-              <Alert severity="info">
-                <FormattedMessage defaultMessage="You cannot start a microphone test while a transcription is in progress." />
+              <Alert variant="info">
+                <AlertDescription>
+                  <FormattedMessage defaultMessage="You cannot start a microphone test while a transcription is in progress." />
+                </AlertDescription>
               </Alert>
             )}
-            {testError && <Alert severity="warning">{testError}</Alert>}
-          </Stack>
-        </Stack>
+            {testError && (
+              <Alert variant="warning">
+                <AlertDescription>{testError}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={handleClose}>
+            <FormattedMessage defaultMessage="Close" />
+          </Button>
+          <Button
+            onClick={handleSave}
+            loading={saving}
+            disabled={!hasChanges || saving}
+            variant="primary"
+          >
+            <FormattedMessage defaultMessage="Save changes" />
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>
-          <FormattedMessage defaultMessage="Close" />
-        </Button>
-        <LoadingButton
-          onClick={handleSave}
-          loading={saving}
-          disabled={!hasChanges || saving}
-          variant="contained"
-        >
-          <FormattedMessage defaultMessage="Save changes" />
-        </LoadingButton>
-      </DialogActions>
     </Dialog>
   );
 };

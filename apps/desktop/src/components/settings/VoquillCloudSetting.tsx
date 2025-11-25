@@ -1,40 +1,32 @@
-import { ArrowUpwardOutlined } from "@mui/icons-material";
-import { Button, Stack, Typography } from "@mui/material";
+import { ArrowUp } from "lucide-react";
 import { FormattedMessage } from "react-intl";
 import { openUpgradePlanDialog } from "../../actions/pricing.actions";
 import { useAppStore } from "../../store";
 import { getIsPaying } from "../../utils/member.utils";
+import { Button } from "../ui/button";
 
 export const VoquillCloudSetting = () => {
   const isPro = useAppStore(getIsPaying);
 
   return (
-    <Stack spacing={1} alignItems="flex-start">
-      <Typography variant="body1">
+    <div className="flex flex-col gap-2 items-start">
+      <p className="text-base">
         <FormattedMessage defaultMessage="Use Voquill Cloud" />
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
+      </p>
+      <p className="text-sm text-muted-foreground">
         <FormattedMessage defaultMessage="No downloads or manual setup. Record on any device and we'll keep your data secure, synced, and ready everywhere." />
-      </Typography>
+      </p>
       {!isPro && (
         <Button
-          variant="contained"
+          variant="primary"
           onClick={openUpgradePlanDialog}
-          sx={{
-            bgcolor: (theme) => theme.vars?.palette.blue,
-            color: (theme) => theme.vars?.palette.onBlue,
-            "&:hover": {
-              bgcolor: (theme) => theme.vars?.palette.blueHover,
-            },
-            "&:active": {
-              bgcolor: (theme) => theme.vars?.palette.blueActive,
-            },
-          }}
-          endIcon={<ArrowUpwardOutlined />}
+          icon={<ArrowUp className="h-4 w-4" />}
+          iconPosition="right"
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
         >
           <FormattedMessage defaultMessage="Upgrade to Pro" />
         </Button>
       )}
-    </Stack>
+    </div>
   );
 };

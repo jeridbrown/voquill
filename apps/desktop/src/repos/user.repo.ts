@@ -12,6 +12,7 @@ type LocalUser = {
   onboarded: boolean;
   preferredMicrophone: string | null;
   preferredLanguage: string | null;
+  preferredTheme: string;
   wordsThisMonth: number;
   wordsThisMonthMonth: string | null;
   wordsTotal: number;
@@ -35,6 +36,7 @@ const fromLocalUser = (localUser: LocalUser): User => {
     timezone: null,
     preferredMicrophone: localUser.preferredMicrophone ?? null,
     preferredLanguage: localUser.preferredLanguage ?? null,
+    preferredTheme: (localUser.preferredTheme ?? "system") as "light" | "dark" | "system",
     wordsThisMonth: localUser.wordsThisMonth ?? 0,
     wordsThisMonthMonth: localUser.wordsThisMonthMonth ?? null,
     wordsTotal: localUser.wordsTotal ?? 0,
@@ -49,6 +51,7 @@ const toLocalUser = (user: User): LocalUser => ({
   onboarded: user.onboarded,
   preferredMicrophone: user.preferredMicrophone ?? null,
   preferredLanguage: user.preferredLanguage ?? null,
+  preferredTheme: user.preferredTheme,
   wordsThisMonth: user.wordsThisMonth,
   wordsThisMonthMonth: user.wordsThisMonthMonth ?? null,
   wordsTotal: user.wordsTotal,

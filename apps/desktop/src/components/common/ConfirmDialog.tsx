@@ -1,17 +1,24 @@
-import { Button, ButtonProps, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { ReactNode } from "react";
+import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { Button, ButtonProps } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 
 export type ConfirmDialogProps = {
   isOpen: boolean;
-  title: ReactNode;
-  content: ReactNode;
+  title: React.ReactNode;
+  content: React.ReactNode;
   onCancel: () => void;
   onConfirm: () => void;
-  confirmLabel?: ReactNode;
-  cancelLabel?: ReactNode;
-  confirmButtonProps?: ButtonProps;
-  cancelButtonProps?: ButtonProps;
+  confirmLabel?: React.ReactNode;
+  cancelLabel?: React.ReactNode;
+  confirmButtonProps?: Partial<ButtonProps>;
+  cancelButtonProps?: Partial<ButtonProps>;
 };
 
 export const ConfirmDialog = ({
@@ -26,19 +33,23 @@ export const ConfirmDialog = ({
   cancelButtonProps,
 }: ConfirmDialogProps) => {
   return (
-    <Dialog open={isOpen} onClose={onCancel} maxWidth="xs" fullWidth>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent dividers>
-        <DialogContentText>{content}</DialogContentText>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onCancel()}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle><span>{title}</span></DialogTitle>
+        </DialogHeader>
+        <div className="py-4">
+          <p className="text-sm text-muted-foreground">{content}</p>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onCancel} {...cancelButtonProps}>
+            {cancelLabel ?? <FormattedMessage defaultMessage="Cancel" />}
+          </Button>
+          <Button variant="primary" onClick={onConfirm} {...confirmButtonProps}>
+            {confirmLabel ?? <FormattedMessage defaultMessage="Confirm" />}
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button variant="text" onClick={onCancel} {...cancelButtonProps}>
-          {cancelLabel ?? <FormattedMessage defaultMessage="Cancel" />}
-        </Button>
-        <Button variant="contained" onClick={onConfirm} {...confirmButtonProps}>
-          {confirmLabel ?? <FormattedMessage defaultMessage="Confirm" />}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

@@ -1,9 +1,8 @@
+import "./index.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { FirebaseOptions, initializeApp } from "firebase/app";
@@ -18,11 +17,10 @@ import { connectStorageEmulator, getStorage } from "firebase/storage";
 import React, { useMemo } from "react";
 import ReactDOM from "react-dom/client";
 import { IntlProvider } from "react-intl";
+import { Toaster } from "sonner";
 import { OverlayRoot } from "./components/overlay/OverlayRoot";
 import { AppWithLoading } from "./components/root/AppWithLoading";
-import { SnackbarEmitter } from "./components/root/SnackbarEmitter";
 import { getIntlConfig } from "./i18n";
-import { theme } from "./theme";
 import { getIsEmulators, getStripePublicKey } from "./utils/env.utils";
 
 const firebaseConfig: FirebaseOptions = {
@@ -94,10 +92,7 @@ const Main = ({ children }: ChildrenProps) => {
   return (
     <React.StrictMode>
       <IntlProvider {...intlConfig}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+        <>{children}</>
       </IntlProvider>
     </React.StrictMode>
   );
@@ -114,7 +109,7 @@ if (isOverlayWindow) {
   root.render(
     <Main>
       <Elements stripe={stripePromise}>
-        <SnackbarEmitter />
+        <Toaster richColors position="bottom-right" />
         <AppWithLoading />
       </Elements>
     </Main>

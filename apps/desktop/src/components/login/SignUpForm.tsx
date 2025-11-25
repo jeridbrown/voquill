@@ -1,25 +1,21 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import {
-  Button,
-  Divider,
-  IconButton,
-  Link,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { FormattedMessage } from "react-intl";
-import { produceAppState, useAppStore } from "../../store";
-import { SignInWithGoogleButton } from "./ProviderButtons";
+import { FormattedMessage, useIntl } from "react-intl";
 import { setMode, submitSignUp } from "../../actions/login.actions";
+import { produceAppState, useAppStore } from "../../store";
 import {
   getCanSubmitSignUp,
   getSignUpConfirmPasswordValidation,
   getSignUpEmailValidation,
   getSignUpPasswordValidation,
 } from "../../utils/login.utils";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { SignInWithGoogleButton } from "./ProviderButtons";
 
 export const SignUpForm = () => {
+  const intl = useIntl();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
@@ -67,82 +63,112 @@ export const SignUpForm = () => {
   };
 
   return (
-    <Stack spacing={2}>
+    <div className="flex flex-col gap-4">
       <SignInWithGoogleButton />
 
-      <Divider>
-        <FormattedMessage defaultMessage="or" />
-      </Divider>
+      <div className="relative flex items-center">
+        <div className="flex-grow border-t border-border" />
+        <span className="mx-4 text-sm text-muted-foreground">
+          <FormattedMessage defaultMessage="or" />
+        </span>
+        <div className="flex-grow border-t border-border" />
+      </div>
 
-      <TextField
-        label={<FormattedMessage defaultMessage="Email" />}
-        type="email"
-        fullWidth
-        value={email}
-        onChange={handleChangeEmail}
-        error={!!emailValidation}
-        helperText={emailValidation}
-        size="small"
-      />
-      <TextField
-        label={<FormattedMessage defaultMessage="Password" />}
-        type={passwordVisible ? "text" : "password"}
-        fullWidth
-        value={password}
-        onChange={handleChangePassword}
-        error={!!passwordValidation}
-        helperText={passwordValidation}
-        size="small"
-        InputProps={{
-          endAdornment: (
-            <IconButton
-              onClick={() => setPasswordVisible((v) => !v)}
-              tabIndex={-1}
-              size="small"
-            >
-              {!passwordVisible ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          ),
-        }}
-      />
-      <TextField
-        label={<FormattedMessage defaultMessage="Confirm password" />}
-        type={confirmPasswordVisible ? "text" : "password"}
-        fullWidth
-        value={confirmPassword}
-        onChange={handleChangeConfirmPassword}
-        error={!!confirmPasswordValidation}
-        helperText={confirmPasswordValidation}
-        size="small"
-        InputProps={{
-          endAdornment: (
-            <IconButton
-              onClick={() => setConfirmPasswordVisible((v) => !v)}
-              tabIndex={-1}
-              size="small"
-            >
-              {!confirmPasswordVisible ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          ),
-        }}
-      />
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="email">
+          <FormattedMessage defaultMessage="Email" />
+        </Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={handleChangeEmail}
+          placeholder={intl.formatMessage({ defaultMessage: "Enter your email" })}
+          className={emailValidation ? "border-destructive" : ""}
+        />
+        {emailValidation && (
+          <p className="text-xs text-destructive">{emailValidation}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="password">
+          <FormattedMessage defaultMessage="Password" />
+        </Label>
+        <div className="relative">
+          <Input
+            id="password"
+            type={passwordVisible ? "text" : "password"}
+            value={password}
+            onChange={handleChangePassword}
+            placeholder={intl.formatMessage({ defaultMessage: "Create a password" })}
+            className={`pr-10 ${passwordValidation ? "border-destructive" : ""}`}
+          />
+          <button
+            type="button"
+            onClick={() => setPasswordVisible((v) => !v)}
+            tabIndex={-1}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground"
+          >
+            {passwordVisible ? (
+              <Eye className="h-4 w-4" />
+            ) : (
+              <EyeOff className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+        {passwordValidation && (
+          <p className="text-xs text-destructive">{passwordValidation}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="confirmPassword">
+          <FormattedMessage defaultMessage="Confirm password" />
+        </Label>
+        <div className="relative">
+          <Input
+            id="confirmPassword"
+            type={confirmPasswordVisible ? "text" : "password"}
+            value={confirmPassword}
+            onChange={handleChangeConfirmPassword}
+            placeholder={intl.formatMessage({ defaultMessage: "Confirm your password" })}
+            className={`pr-10 ${confirmPasswordValidation ? "border-destructive" : ""}`}
+          />
+          <button
+            type="button"
+            onClick={() => setConfirmPasswordVisible((v) => !v)}
+            tabIndex={-1}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground"
+          >
+            {confirmPasswordVisible ? (
+              <Eye className="h-4 w-4" />
+            ) : (
+              <EyeOff className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+        {confirmPasswordValidation && (
+          <p className="text-xs text-destructive">{confirmPasswordValidation}</p>
+        )}
+      </div>
 
       <Button
-        variant="contained"
-        fullWidth
+        variant="primary"
+        className="w-full"
         disabled={!canSubmit}
         onClick={handleSubmit}
       >
         <FormattedMessage defaultMessage="Create account" />
       </Button>
 
-      <Link
-        component="button"
+      <button
+        type="button"
         onClick={handleClickLogin}
-        sx={{ alignSelf: "center" }}
+        className="text-sm text-primary hover:underline self-center"
       >
         <FormattedMessage defaultMessage="Already have an account? Log in" />
-      </Link>
-    </Stack>
+      </button>
+    </div>
   );
 };

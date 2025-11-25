@@ -1,16 +1,13 @@
-import CloseIcon from "@mui/icons-material/Close";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { produceAppState, useAppStore } from "../../store";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 import { AIPostProcessingConfiguration } from "./AIPostProcessingConfiguration";
 
 export const AIPostProcessingDialog = () => {
@@ -25,32 +22,28 @@ export const AIPostProcessingDialog = () => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ display: "flex", alignItems: "center" }}>
-        <FormattedMessage defaultMessage="AI post processing" />
-        <IconButton
-          onClick={handleClose}
-          size="small"
-          sx={{ ml: "auto" }}
-          aria-label="Close"
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent dividers>
-        <Stack spacing={3} alignItems="flex-start">
-          <Typography variant="body1" color="text.secondary">
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => !isOpen && handleClose()}
+    >
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>
+            <FormattedMessage defaultMessage="AI post processing" />
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-6 items-start mt-4">
+          <p className="text-base text-muted-foreground">
             <FormattedMessage defaultMessage="Tell Voquill how to enhance your transcripts after they are created." />
-          </Typography>
-
+          </p>
           <AIPostProcessingConfiguration />
-        </Stack>
+        </div>
+        <DialogFooter>
+          <Button onClick={handleClose}>
+            <FormattedMessage defaultMessage="Done" />
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>
-          <FormattedMessage defaultMessage="Done" />
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

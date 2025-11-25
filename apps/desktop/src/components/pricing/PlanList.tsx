@@ -1,13 +1,4 @@
-import { CheckRounded } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Typography,
-  type SxProps,
-} from "@mui/material";
+import { Check } from "lucide-react";
 import { MemberPlan } from "@repo/types";
 import { FormattedMessage, useIntl } from "react-intl";
 import { loadPrices } from "../../actions/pricing.actions";
@@ -15,6 +6,8 @@ import { useOnEnter } from "../../hooks/helper.hooks";
 import { useAppStore } from "../../store";
 import { getEffectivePlan } from "../../utils/member.utils";
 import { getDollarPriceFromKey } from "../../utils/price.utils";
+import { Button } from "../ui/button";
+import { cn } from "../ui/utils/cn";
 
 type CheckmarkRowProps = {
   children?: React.ReactNode;
@@ -23,63 +16,47 @@ type CheckmarkRowProps = {
 
 const CheckmarkRow = ({ children, disabled }: CheckmarkRowProps) => {
   return (
-    <Stack
-      direction="row"
-      spacing={1}
-      alignItems="center"
-      sx={{ opacity: disabled ? 0.3 : 1 }}
+    <div
+      className={cn(
+        "flex flex-row gap-2 items-center",
+        disabled && "opacity-30"
+      )}
     >
-      <CheckRounded />
-      <Typography>{children}</Typography>
-    </Stack>
+      <Check className="h-4 w-4" />
+      <span className="text-sm">{children}</span>
+    </div>
   );
 };
 
 type PlanCardProps = {
-  cardSx?: SxProps;
-  buttonSx?: SxProps;
-  buttonVariant?: "contained" | "outlined" | "text";
   title?: React.ReactNode;
   price?: React.ReactNode;
   children?: React.ReactNode;
-  color?: string;
-  disabled?: boolean;
+  highlighted?: boolean;
   button?: React.ReactNode;
 };
 
 const PlanCard = ({
-  cardSx,
   title,
   price,
   children,
-  color,
+  highlighted,
   button,
 }: PlanCardProps) => {
   return (
-    <Card
-      sx={{
-        width: { xs: "100%", sm: 350 },
-        border: "3px solid",
-        borderColor: color ?? "transparent",
-        backgroundColor: "level0",
-        ...cardSx,
-      }}
+    <div
+      className={cn(
+        "w-full sm:w-[350px] border-[3px] rounded-lg bg-card",
+        highlighted ? "border-primary" : "border-border"
+      )}
     >
-      <CardContent
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "stretch",
-          gap: 1,
-          p: 2.5,
-        }}
-      >
-        <Typography variant="subtitle1">{title}</Typography>
-        <Typography variant="h4">{price}</Typography>
-        <Box sx={{ mt: 1, mb: 2 }}>{button}</Box>
+      <div className="flex flex-col items-stretch gap-2 p-5">
+        <span className="text-sm font-medium">{title}</span>
+        <span className="text-2xl font-bold">{price}</span>
+        <div className="mt-2 mb-4">{button}</div>
         {children}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
@@ -87,13 +64,13 @@ export type PlanListProps = {
   onSelect: (plan: MemberPlan) => void;
   disabled?: boolean;
   text?: string;
-  sx?: SxProps;
+  className?: string;
   ignoreCurrentPlan?: boolean;
 };
 
 export const PlanList = ({
   onSelect,
-  sx,
+  className,
   text,
   disabled,
   ignoreCurrentPlan,
@@ -111,7 +88,10 @@ export const PlanList = ({
 
   const getText = (plan: MemberPlan) => {
     if (effectivePlan === plan && !ignoreCurrentPlan) {
-      return { text: intl.formatMessage({ defaultMessage: "Current plan" }), disabled: true };
+      return {
+        text: intl.formatMessage({ defaultMessage: "Current plan" }),
+        disabled: true,
+      };
     }
 
     return {
@@ -124,62 +104,79 @@ export const PlanList = ({
     <PlanCard
       title={<FormattedMessage defaultMessage="Community" />}
       price={<FormattedMessage defaultMessage="Free" />}
-      buttonVariant="outlined"
-      cardSx={{ borderColor: "level1" }}
       button={
         <Button
-          variant="outlined"
+          variant="outline"
           onClick={() => onSelect("free")}
           disabled={getText("free").disabled}
-          fullWidth
+          className="w-full"
         >
           {getText("free").text}
         </Button>
       }
     >
-      <CheckmarkRow><FormattedMessage defaultMessage="On-device processing" /></CheckmarkRow>
-      <CheckmarkRow><FormattedMessage defaultMessage="Unlimited words" /></CheckmarkRow>
-      <CheckmarkRow><FormattedMessage defaultMessage="Custom API keys" /></CheckmarkRow>
-      <CheckmarkRow disabled><FormattedMessage defaultMessage="Manual setup" /></CheckmarkRow>
+      <CheckmarkRow>
+        <FormattedMessage defaultMessage="On-device processing" />
+      </CheckmarkRow>
+      <CheckmarkRow>
+        <FormattedMessage defaultMessage="Unlimited words" />
+      </CheckmarkRow>
+      <CheckmarkRow>
+        <FormattedMessage defaultMessage="Custom API keys" />
+      </CheckmarkRow>
+      <CheckmarkRow disabled>
+        <FormattedMessage defaultMessage="Manual setup" />
+      </CheckmarkRow>
     </PlanCard>
   );
 
   const proCard = (
     <PlanCard
       title={<FormattedMessage defaultMessage="Pro" />}
-      price={proPrice ? intl.formatMessage({ defaultMessage: "${proPrice}/month" }, { proPrice }) : "--"}
-      cardSx={{ borderColor: "primary.main" }}
+      price={
+        proPrice
+          ? intl.formatMessage(
+              { defaultMessage: "${proPrice}/month" },
+              { proPrice }
+            )
+          : "--"
+      }
+      highlighted
       button={
         <Button
-          variant="contained"
+          variant="primary"
           onClick={() => onSelect("pro")}
           disabled={getText("pro").disabled}
-          fullWidth
+          className="w-full"
         >
           {getText("pro").text}
         </Button>
       }
     >
-      <CheckmarkRow><FormattedMessage defaultMessage="Everything community has" /></CheckmarkRow>
-      <CheckmarkRow><FormattedMessage defaultMessage="Cross-device data storage" /></CheckmarkRow>
-      <CheckmarkRow><FormattedMessage defaultMessage="No setup needed" /></CheckmarkRow>
-      <CheckmarkRow><FormattedMessage defaultMessage="Priority support" /></CheckmarkRow>
+      <CheckmarkRow>
+        <FormattedMessage defaultMessage="Everything community has" />
+      </CheckmarkRow>
+      <CheckmarkRow>
+        <FormattedMessage defaultMessage="Cross-device data storage" />
+      </CheckmarkRow>
+      <CheckmarkRow>
+        <FormattedMessage defaultMessage="No setup needed" />
+      </CheckmarkRow>
+      <CheckmarkRow>
+        <FormattedMessage defaultMessage="Priority support" />
+      </CheckmarkRow>
     </PlanCard>
   );
 
   return (
-    <Stack
-      sx={{
-        flexDirection: "row",
-        gap: 2,
-        alignItems: "stretch",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        ...sx,
-      }}
+    <div
+      className={cn(
+        "flex flex-row gap-4 items-stretch justify-center flex-wrap",
+        className
+      )}
     >
       {communityCard}
       {proCard}
-    </Stack>
+    </div>
   );
 };

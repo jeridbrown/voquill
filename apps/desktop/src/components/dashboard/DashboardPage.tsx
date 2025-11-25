@@ -1,4 +1,3 @@
-import { Box, Stack, Typography } from "@mui/material";
 import { getVersion } from "@tauri-apps/api/app";
 import { Outlet } from "react-router-dom";
 import { useAsyncData } from "../../hooks/async.hooks";
@@ -8,30 +7,14 @@ export default function DashboardPage() {
   const data = useAsyncData(getVersion, []);
 
   return (
-    <Stack direction="row" sx={{ height: "100%", width: "100%" }}>
-      <Box
-        sx={{
-          display: { xs: "none", sm: "flex" },
-          flexDirection: "column",
-          width: 224,
-        }}
-      >
+    <div className="flex flex-row h-full w-full">
+      <div className="hidden sm:flex flex-col w-56">
         <DashboardMenu />
-      </Box>
+      </div>
       <Outlet />
-      <Typography
-        variant="caption"
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 8,
-          fontSize: "0.55rem",
-          color: "text.secondary",
-          opacity: 0.3,
-        }}
-      >
+      <div className="fixed bottom-0 left-2 text-[0.55rem] text-muted-foreground opacity-30">
         {data.state === "success" ? `v${data.data}` : ""}
-      </Typography>
-    </Stack>
+      </div>
+    </div>
   );
 }

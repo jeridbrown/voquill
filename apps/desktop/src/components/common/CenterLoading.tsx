@@ -1,17 +1,9 @@
-import { CircularProgress, Stack } from "@mui/material";
+import { CircularProgress } from "../ui/progress";
 
 export const CenterLoading = () => {
-	return (
-		<Stack
-			sx={{
-				height: "100%",
-				justifyContent: "center",
-				alignItems: "center",
-				pb: 8,
-			}}
-			spacing={2}
-		>
-			<CircularProgress />
-		</Stack>
-	);
+  return (
+    <div className="h-full flex flex-col justify-center items-center pb-16 gap-4">
+      <CircularProgress />
+    </div>
+  );
 };

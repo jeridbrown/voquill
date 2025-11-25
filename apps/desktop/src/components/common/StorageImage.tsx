@@ -1,19 +1,19 @@
-import { Box, SxProps, Theme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getStorageRepo } from "../../repos";
+import { cn } from "../ui/utils/cn";
 
 export type StorageImageProps = {
   path?: string | null;
   alt?: string;
   size?: number;
-  sx?: SxProps<Theme>;
+  className?: string;
 };
 
 export const StorageImage = ({
   path,
   alt = "",
   size = 40,
-  sx,
+  className,
 }: StorageImageProps) => {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
@@ -48,18 +48,11 @@ export const StorageImage = ({
   }
 
   return (
-    <Box
-      component="img"
+    <img
       src={downloadUrl ?? undefined}
       alt={alt}
-      sx={{
-        width: size,
-        height: size,
-        objectFit: "cover",
-        backgroundColor: "level1",
-        flexShrink: 0,
-        ...sx,
-      }}
+      className={cn("object-cover bg-muted shrink-0", className)}
+      style={{ width: size, height: size }}
     />
   );
 };

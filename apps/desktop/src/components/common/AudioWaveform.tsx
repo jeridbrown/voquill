@@ -1,7 +1,6 @@
-import { Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
+import { cn } from "../ui/utils/cn";
 
 const TAU = Math.PI * 2;
 const LEVEL_SMOOTHING = 0.18;
@@ -38,7 +37,7 @@ const createWavePath = (
   baseline: number,
   amplitude: number,
   frequency: number,
-  phase: number,
+  phase: number
 ): string => {
   const segments = Math.max(72, Math.floor(width / 2));
   let path = `M 0 ${baseline + amplitude * Math.sin(phase)}`;
@@ -77,8 +76,8 @@ export const AudioWaveform = ({
   className,
   style,
 }: AudioWaveformProps) => {
-  const theme = useTheme();
-  const resolvedColor = strokeColor ?? theme.vars?.palette.primary.main;
+  // Default to primary color from CSS variable
+  const resolvedColor = strokeColor ?? "hsl(var(--primary))";
   const waveRefs = useRef<(SVGPathElement | null)[]>([]);
   const animationFrameRef = useRef<number | null>(null);
   const animationStateRef = useRef<AnimationState>({
@@ -102,7 +101,7 @@ export const AudioWaveform = ({
       path.setAttribute("d", defaultPath);
       path.setAttribute(
         "opacity",
-        (WAVE_CONFIG[index]?.opacity ?? 1).toString(),
+        (WAVE_CONFIG[index]?.opacity ?? 1).toString()
       );
     });
   }, [width, height]);
@@ -154,7 +153,7 @@ export const AudioWaveform = ({
         path.setAttribute("d", defaultPath);
         path.setAttribute(
           "opacity",
-          (WAVE_CONFIG[index]?.opacity ?? 1).toString(),
+          (WAVE_CONFIG[index]?.opacity ?? 1).toString()
         );
       });
 
@@ -200,7 +199,7 @@ export const AudioWaveform = ({
           WAVE_CONFIG[index] ?? WAVE_CONFIG[WAVE_CONFIG.length - 1];
         const amplitudeFactor = Math.min(
           MAX_AMPLITUDE,
-          Math.max(MIN_AMPLITUDE, level * config.multiplier),
+          Math.max(MIN_AMPLITUDE, level * config.multiplier)
         );
         const amplitude = Math.max(1, waveHeight * 0.75 * amplitudeFactor);
         const phase = state.phase + config.phaseOffset;
@@ -209,7 +208,7 @@ export const AudioWaveform = ({
           baseline,
           amplitude,
           config.frequency,
-          phase,
+          phase
         );
         path.setAttribute("d", pathD);
         path.setAttribute("opacity", config.opacity.toString());
@@ -235,18 +234,13 @@ export const AudioWaveform = ({
         animationFrameRef.current = null;
       }
     },
-    [],
+    []
   );
 
   return (
-    <Box
-      className={className}
+    <div
+      className={cn("relative w-full h-full", className)}
       style={style}
-      sx={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-      }}
     >
       <svg
         width="100%"
@@ -270,6 +264,6 @@ export const AudioWaveform = ({
           />
         ))}
       </svg>
-    </Box>
+    </div>
   );
 };

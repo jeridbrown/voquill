@@ -1,24 +1,13 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { keyframes } from "@mui/material/styles";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { produceAppState, useAppStore } from "../../store";
 import { getPrettyKeyName } from "../../utils/keyboard.utils";
+import { cn } from "../ui/utils/cn";
 
 type HotKeyProps = {
   value?: string[];
   onChange?: (value: string[]) => void;
 };
-
-const pulseBorder = keyframes`
-  0%, 100% {
-    border-color: rgba(25, 118, 210, 0.5);
-  }
-  50% {
-    border-color: rgba(25, 118, 210, 1);
-  }
-`;
 
 export const HotKey = ({ value, onChange }: HotKeyProps) => {
   const intl = useIntl();
@@ -104,7 +93,7 @@ export const HotKey = ({ value, onChange }: HotKeyProps) => {
   }, [value, focused, hasInteracted, intl]);
 
   return (
-    <Box
+    <div
       ref={boxRef}
       tabIndex={0}
       onClick={() => boxRef.current?.focus()}
@@ -113,31 +102,21 @@ export const HotKey = ({ value, onChange }: HotKeyProps) => {
         setFocused(false);
         setHasInteracted(false);
       }}
-      sx={{
-        width: 200,
-        height: 40,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 1,
-        cursor: "pointer",
-        bgcolor: (t) =>
-          focused ? t.vars?.palette.level2 : t.vars?.palette.level1,
-        border: focused ? "2px solid" : "2px solid transparent",
-        animation: focused ? `${pulseBorder} 2s ease-in-out infinite` : "none",
-        outline: "none",
-        "&:hover": {
-          border: (t) =>
-            focused ? "2px solid" : `2px solid ${t.vars?.palette.divider}`,
-        },
-      }}
+      className={cn(
+        "w-[200px] h-10 flex items-center justify-center rounded cursor-pointer outline-none transition-all",
+        focused
+          ? "bg-muted border-2 border-primary animate-pulse"
+          : "bg-muted/50 border-2 border-transparent hover:border-border"
+      )}
     >
-      <Typography
-        variant="body2"
-        color={empty ? "text.secondary" : "text.primary"}
+      <span
+        className={cn(
+          "text-sm",
+          empty ? "text-muted-foreground" : "text-foreground"
+        )}
       >
         {label}
-      </Typography>
-    </Box>
+      </span>
+    </div>
   );
 };

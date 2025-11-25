@@ -3,6 +3,7 @@ use chacha20poly1305::{
     aead::{Aead, KeyInit, OsRng},
     ChaCha20Poly1305, Nonce,
 };
+use rand::RngCore;
 use sha2::{Digest, Sha256};
 use std::sync::OnceLock;
 

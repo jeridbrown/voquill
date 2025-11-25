@@ -1,24 +1,22 @@
-import { Box, type BoxProps } from "@mui/material";
 import AppLogo from "../../assets/app-logo.svg?react";
+import { cn } from "../ui/utils/cn";
 
-export type LogoProps = BoxProps;
+export type LogoProps = {
+  className?: string;
+  width?: string | number;
+  height?: string | number;
+};
 
 export const Logo = ({
-  sx,
+  className,
   width = "2.2rem",
   height = "2.2rem",
-  ...rest
 }: LogoProps) => {
   return (
-    <Box
-      component={AppLogo}
+    <AppLogo
+      className={cn("text-primary", className)}
       width={width}
       height={height}
-      sx={{
-        color: "primary.main",
-        ...sx,
-      }}
-      {...rest}
     />
   );
 };

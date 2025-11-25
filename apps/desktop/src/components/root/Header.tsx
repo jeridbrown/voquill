@@ -1,8 +1,4 @@
-import {
-  AccountCircleOutlined,
-  ArrowUpwardOutlined,
-} from "@mui/icons-material";
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import { UserCircle, ArrowUp } from "lucide-react";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
@@ -21,7 +17,7 @@ import { LogoWithText } from "../common/LogoWithText";
 import {
   MenuPopoverBuilder,
   type MenuPopoverItem,
-} from "../common/MenuPopover";
+} from "../common/MenuPopoverNew";
 import { maybeArrayElements } from "../settings/AIPostProcessingConfiguration";
 
 export type BaseHeaderProps = {
@@ -36,17 +32,12 @@ export const BaseHeader = ({
   rightContent,
 }: BaseHeaderProps) => {
   return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-      sx={{ py: 1, px: 2 }}
-    >
-      <Box sx={{ py: 0.5, pr: 1 }}>{logo}</Box>
+    <div className="flex flex-row justify-between items-center py-2 px-4">
+      <div className="py-1 pr-2">{logo}</div>
       {leftContent}
-      <Box sx={{ flexGrow: 1 }} />
+      <div className="flex-grow" />
       {rightContent}
-    </Stack>
+    </div>
   );
 };
 
@@ -80,7 +71,7 @@ export const AppHeader = () => {
         });
         close();
       },
-      leading: <AccountCircleOutlined />,
+      leading: <UserCircle className="h-5 w-5" />,
     },
     ...maybeArrayElements<MenuPopoverItem>(!isPaying, [
       {
@@ -90,7 +81,7 @@ export const AppHeader = () => {
           openUpgradePlanDialog();
           close();
         },
-        leading: <ArrowUpwardOutlined />,
+        leading: <ArrowUp className="h-5 w-5" />,
       },
     ]),
   ];
@@ -99,53 +90,35 @@ export const AppHeader = () => {
   if (isOnboarded) {
     rightContent = (
       <MenuPopoverBuilder
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
         items={sharedRightMenuItems}
       >
         {({ ref, open }) => (
-          <Button
+          <button
             ref={ref}
             onClick={open}
-            sx={{
-              display: { xs: "none", sm: "flex" },
-              flexShrink: 0,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 1.5,
-            }}
+            className="hidden sm:flex flex-shrink-0 flex-row items-center gap-3 cursor-pointer bg-transparent border-none p-0 hover:opacity-80 transition-opacity"
           >
-            <Avatar
-              sx={{
-                width: 32,
-                height: 32,
-                fontSize: 14,
-              }}
-            >
+            <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
               {myInitials}
-            </Avatar>
-            <Stack textAlign="left" spacing={0.5}>
-              <Typography variant="subtitle1" fontWeight={700} lineHeight={1}>
+            </div>
+            <div className="flex flex-col items-start gap-1">
+              <div className="text-sm font-bold leading-none text-foreground">
                 {myName}
-              </Typography>
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                lineHeight={1}
-              >
+              </div>
+              <div className="text-xs text-muted-foreground leading-none">
                 {planName}
-              </Typography>
-            </Stack>
-          </Button>
+              </div>
+            </div>
+          </button>
         )}
       </MenuPopoverBuilder>
     );
   }
 
   const logo = (
-    <Box onClick={handleLogoClick} sx={{ cursor: "pointer" }}>
+    <div onClick={handleLogoClick} className="cursor-pointer">
       <LogoWithText />
-    </Box>
+    </div>
   );
 
   return (

@@ -13,6 +13,7 @@ export type DatabaseUser = {
   timezone?: Nullable<string>;
   preferredLanguage?: Nullable<string>;
   preferredMicrophone?: Nullable<string>;
+  preferredTheme: "light" | "dark" | "system";
   playInteractionChime: boolean;
   wordsThisMonth: number;
   wordsThisMonthMonth: Nullable<string>;
@@ -32,6 +33,7 @@ export const UserZod = z.object({
   timezone: z.string().nullable().optional(),
   preferredLanguage: z.string().nullable().optional(),
   preferredMicrophone: z.string().nullable().optional(),
+  preferredTheme: z.enum(["light", "dark", "system"]),
   playInteractionChime: z.boolean(),
   wordsThisMonth: z.number(),
   wordsThisMonthMonth: z.string().nullable(),

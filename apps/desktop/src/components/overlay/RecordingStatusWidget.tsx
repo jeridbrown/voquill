@@ -1,58 +1,33 @@
-import { Box, LinearProgress } from "@mui/material";
-import { alpha, useTheme } from "@mui/material/styles";
 import { AudioWaveform } from "../common/AudioWaveform";
 import { useAppStore } from "../../store";
+import { LinearProgress } from "../ui/progress";
 
 export const RecordingStatusWidget = () => {
-  const theme = useTheme();
   const phase = useAppStore((state) => state.overlayPhase);
   const levels = useAppStore((state) => state.audioLevels);
   const isListening = phase === "recording";
   const isProcessing = phase === "loading";
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: `${theme.spacing(0.75)} ${theme.spacing(2)}`,
-        borderRadius: theme.spacing(2.25),
-        backgroundColor: alpha(theme.palette.common.black, 0.92),
+    <div
+      className="relative flex items-center justify-center px-4 py-1.5 rounded-[18px] min-w-[128px] h-8 pointer-events-none overflow-hidden"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.92)",
         backdropFilter: "blur(14px)",
-        boxShadow: `0 10px 35px ${alpha(theme.palette.common.black, 0.36)}`,
-        minWidth: theme.spacing(16),
-        height: theme.spacing(4),
-        pointerEvents: "none",
-        overflow: "hidden",
+        boxShadow: "0 10px 35px rgba(0, 0, 0, 0.36)",
       }}
     >
-      <Box
-        sx={{
-          position: "relative",
-          width: theme.spacing(16),
-          height: theme.spacing(3),
-        }}
-      >
+      <div className="relative w-32 h-6">
         {isProcessing ? (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <LinearProgress sx={{ width: "100%", height: "2px" }} />
-          </Box>
+          <div className="flex items-center justify-center w-full h-full">
+            <LinearProgress className="w-full h-0.5" />
+          </div>
         ) : (
           <AudioWaveform
             levels={levels}
             active={isListening}
             processing={isProcessing}
-            strokeColor={theme.palette.common.white}
+            strokeColor="#ffffff"
             width={120}
             height={36}
             style={{
@@ -61,21 +36,14 @@ export const RecordingStatusWidget = () => {
             }}
           />
         )}
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none",
-            background: `linear-gradient(90deg, ${alpha(
-              theme.palette.common.black,
-              0.9
-            )} 0%, transparent 18%, transparent 85%, ${alpha(
-              theme.palette.common.black,
-              0.9
-            )} 100%)`,
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, transparent 18%, transparent 85%, rgba(0, 0, 0, 0.9) 100%)",
           }}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };

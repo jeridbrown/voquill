@@ -11,6 +11,8 @@ pub struct User {
     pub preferred_microphone: Option<String>,
     #[serde(default)]
     pub preferred_language: Option<String>,
+    #[serde(default = "default_preferred_theme")]
+    pub preferred_theme: String,
     #[serde(default)]
     pub words_this_month: i64,
     #[serde(default)]
@@ -23,4 +25,8 @@ pub struct User {
 
 const fn default_play_interaction_chime() -> bool {
     true
+}
+
+fn default_preferred_theme() -> String {
+    "system".to_string()
 }

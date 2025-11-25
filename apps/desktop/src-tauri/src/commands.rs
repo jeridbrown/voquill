@@ -551,7 +551,10 @@ pub async fn tone_list(
 ) -> Result<Vec<crate::domain::Tone>, String> {
     crate::db::tone_queries::fetch_all_tones(database.pool())
         .await
-        .map_err(|err| err.to_string())
+        .map_err(|err| {
+            eprintln!("Failed to load tones from database: {:?}", err);
+            format!("Database error: {}", err)
+        })
 }
 
 #[tauri::command]

@@ -1,6 +1,5 @@
-import { Add, Close, RestartAlt } from "@mui/icons-material";
-import { Button, IconButton, Stack, Typography } from "@mui/material";
 import type { Hotkey } from "@repo/types";
+import { Plus, X, RotateCcw } from "lucide-react";
 import type { ReactNode } from "react";
 import { FormattedMessage } from "react-intl";
 import { showErrorSnackbar } from "../../actions/app.actions";
@@ -10,6 +9,7 @@ import { registerHotkeys } from "../../utils/app.utils";
 import { createId } from "../../utils/id.utils";
 import { getDefaultHotkeyCombosForAction } from "../../utils/keyboard.utils";
 import { HotKey } from "../common/HotKey";
+import { Button } from "../ui/button";
 
 export type HotkeySettingProps = {
   title: ReactNode;
@@ -105,67 +105,65 @@ export const HotkeySetting = ({
     );
 
   return (
-    <Stack direction="row" spacing={2} alignItems="flex-start">
-      <Stack spacing={1} flex={1}>
-        <Typography variant="body1" fontWeight="bold">
-          {title}
-        </Typography>
-        <Typography variant="body2">{description}</Typography>
-      </Stack>
-      <Stack spacing={1} alignItems="flex-end">
-        <Stack direction="row" spacing={1} alignItems="center">
+    <div className="flex flex-row gap-4 items-start">
+      <div className="flex flex-col gap-1 flex-1">
+        <p className="text-base font-bold">{title}</p>
+        <p className="text-sm">{description}</p>
+      </div>
+      <div className="flex flex-col gap-2 items-end">
+        <div className="flex flex-row gap-2 items-center">
           <HotKey value={primaryValue} onChange={handlePrimaryChange} />
           {primaryHotkey && defaultCombos.length === 0 && (
-            <IconButton
-              size="small"
+            <Button
+              size="sm"
+              variant="ghost"
               onClick={() => handleDeleteHotkey(primaryHotkey.id)}
+              className="h-8 w-8 p-0"
             >
-              <Close color="disabled" />
-            </IconButton>
+              <X className="h-4 w-4 text-muted-foreground" />
+            </Button>
           )}
           {primaryHotkey &&
             defaultCombos.length > 0 &&
             !isPrimaryUsingDefault && (
-              <IconButton
-                size="small"
+              <Button
+                size="sm"
+                variant="ghost"
                 aria-label="Revert to default hotkey"
                 onClick={handleRevertPrimary}
+                className="h-8 w-8 p-0"
               >
-                <RestartAlt color="disabled" />
-              </IconButton>
+                <RotateCcw className="h-4 w-4 text-muted-foreground" />
+              </Button>
             )}
-        </Stack>
+        </div>
         {additionalHotkeys.map((hotkey) => (
-          <Stack
-            key={hotkey.id}
-            direction="row"
-            spacing={1}
-            alignItems="center"
-          >
+          <div key={hotkey.id} className="flex flex-row gap-2 items-center">
             <HotKey
               value={hotkey.keys}
               onChange={(keys) => saveKey(hotkey.id, keys)}
             />
-            <IconButton
-              size="small"
+            <Button
+              size="sm"
+              variant="ghost"
               onClick={() => handleDeleteHotkey(hotkey.id)}
+              className="h-8 w-8 p-0"
             >
-              <Close color="disabled" />
-            </IconButton>
-          </Stack>
+              <X className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </div>
         ))}
         <Button
-          variant="text"
-          startIcon={<Add />}
-          size={buttonSize}
-          sx={{ py: 0.5 }}
+          variant="ghost"
+          size={buttonSize === "small" ? "sm" : "md"}
           onClick={() => saveKey()}
+          icon={<Plus className="h-4 w-4" />}
+          iconPosition="left"
+          className="py-1"
         >
-          <Typography variant="body2" fontWeight={500}>
-            {buttonLabel}
-          </Typography>
+          <span className="text-sm font-medium">{buttonLabel}</span>
         </Button>
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };

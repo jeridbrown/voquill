@@ -1,17 +1,7 @@
-import {
-  Table as MuiTable,
-  TableBody as MuiTableBody,
-  TableFooter as MuiTableFooter,
-  TableHead as MuiTableHead,
-  TableRow as MuiTableRow,
-  Paper,
-  TableCell,
-  TableContainer,
-  TableSortLabel,
-  type SxProps,
-} from "@mui/material";
 import * as React from "react";
 import { TableVirtuoso, type TableComponents } from "react-virtuoso";
+import { ChevronUp, ChevronDown } from "lucide-react";
+import { cn } from "../ui/utils/cn";
 
 export type DivRowProps = React.HTMLAttributes<HTMLDivElement> & {
   "data-index"?: number;
@@ -26,14 +16,20 @@ export interface ColumnDef<T> {
 }
 
 const DefaultRow = React.forwardRef<HTMLDivElement, DivRowProps>(
-  (props, ref) => <MuiTableRow ref={ref} component="div" {...props} />
+  (props, ref) => (
+    <div
+      ref={ref}
+      {...props}
+      className={cn("flex border-b border-border", props.className)}
+    />
+  )
 );
 
 export interface AppTableProps<T> {
   rows: T[];
   columns: ColumnDef<T>[];
   height?: number;
-  sx?: SxProps;
+  className?: string;
   RowComponent?: React.ForwardRefExoticComponent<
     React.PropsWithoutRef<DivRowProps> & React.RefAttributes<HTMLDivElement>
   >;
@@ -47,7 +43,7 @@ type SortDirection = "asc" | "desc";
 export function AppTable<T>({
   rows,
   columns,
-  sx,
+  className,
   RowComponent,
   footer,
   defaultSortColumnIndex,
@@ -99,14 +95,18 @@ export function AppTable<T>({
         HTMLDivElement,
         React.HTMLAttributes<HTMLDivElement>
       >((props, ref) => (
-        <TableContainer component={Paper} ref={ref} {...props} />
-      )) as any,
+        <div
+          ref={ref}
+          {...props}
+          className={cn("border rounded-lg bg-card overflow-auto", className)}
+        />
+      )) as TableComponents<T>["Scroller"],
 
       Table: (props) => (
-        <MuiTable
+        <div
           {...props}
-          component="div"
-          sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
+          className="w-full border-collapse table-fixed"
+          style={{ display: "table" }}
         />
       ),
 
@@ -114,87 +114,86 @@ export function AppTable<T>({
         HTMLDivElement,
         React.HTMLAttributes<HTMLDivElement>
       >((props, ref) => (
-        <MuiTableHead ref={ref} component="div" {...props} />
-      )) as any,
+        <div ref={ref} {...props} style={{ display: "table-header-group" }} />
+      )) as TableComponents<T>["TableHead"],
 
       TableBody: React.forwardRef<
         HTMLDivElement,
         React.HTMLAttributes<HTMLDivElement>
       >((props, ref) => (
-        <MuiTableBody ref={ref} component="div" {...props} />
-      )) as any,
+        <div ref={ref} {...props} style={{ display: "table-row-group" }} />
+      )) as TableComponents<T>["TableBody"],
 
-      TableRow: (RowComponent ?? DefaultRow) as any,
+      TableRow: (RowComponent ?? DefaultRow) as TableComponents<T>["TableRow"],
 
-      TableFooter: React.forwardRef<
-        HTMLDivElement,
-        React.HTMLAttributes<HTMLDivElement>
-      >((props, ref) => (
-        <MuiTableFooter ref={ref} component="div" {...props} />
-      )) as any,
     }),
-    [RowComponent]
+    [RowComponent, className]
   );
 
   const FixedHeaderContent = () => (
-    <MuiTableRow component="div">
+    <div className="flex bg-muted" style={{ display: "table-row" }}>
       {columns.map((col, idx) => {
         const sortable = Boolean(col.getSortKey);
         const active = sortIdx === idx;
         const content =
           typeof col.header === "function" ? col.header() : col.header;
         return (
-          <TableCell
+          <div
             key={idx}
-            variant="head"
-            component="div"
-            sx={{
+            className={cn(
+              "p-3 text-sm font-medium text-left select-none",
+              sortable && "cursor-pointer hover:bg-muted/80"
+            )}
+            style={{
               width: colWidths[idx],
-              cursor: sortable ? "pointer" : undefined,
-              userSelect: "none",
-              backgroundColor: "level1",
+              display: "table-cell",
+              verticalAlign: "middle",
             }}
             onClick={() => handleHeaderClick(idx)}
           >
-            {sortable ? (
-              <TableSortLabel
-                active={active}
-                direction={active ? direction : "asc"}
-              >
-                {content}
-              </TableSortLabel>
-            ) : (
-              content
-            )}
-          </TableCell>
+            <div className="flex items-center gap-1">
+              {content}
+              {sortable && active && (
+                direction === "asc" ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )
+              )}
+            </div>
+          </div>
         );
       })}
-    </MuiTableRow>
+    </div>
   );
 
   const RowContent = (_: number, row: T) => (
     <>
       {columns.map((col, idx) => (
-        <TableCell component="div" key={idx} sx={{ width: colWidths[idx] }}>
+        <div
+          key={idx}
+          className="p-3 text-sm"
+          style={{
+            width: colWidths[idx],
+            display: "table-cell",
+            verticalAlign: "middle",
+          }}
+        >
           {col.cell(row)}
-        </TableCell>
+        </div>
       ))}
     </>
   );
 
-  const FixedFooterContent = React.useCallback(() => {
-    return footer;
-  }, [footer]);
-
   return (
-    <Paper sx={sx}>
+    <div className={cn("border rounded-lg bg-card", className)}>
       <TableVirtuoso
         data={sortedRows}
         components={VirtuosoComponents}
         fixedHeaderContent={FixedHeaderContent}
         itemContent={RowContent}
-        fixedFooterContent={(footer ? FixedFooterContent : undefined) as any}
       />
-    </Paper>
+      {footer}
+    </div>
   );
 }

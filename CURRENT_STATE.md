@@ -7,18 +7,53 @@
 ## Active Work
 
 ### Current Branch
-- **Branch**: `dev`
-- **Status**: ✅ Workflow established - Clean working tree
-- **Last Session**: Documentation setup and dev branch creation
+- **Branch**: `feature/ui-refactor-tailwind`
+- **Status**: 🔄 Planning Complete - Ready to Begin Implementation
+- **Last Session**: Comprehensive UI refactor planning and documentation
+- **Base Branch**: `dev` (will merge back when complete)
 
 ### Current Focus
-- **Phase**: **Bug Fixes & Pre-Deployment**
-- **Status**: In progress - 4 of 5 issues complete (80%)
-- **Next Steps**: #5 (console cleanup - requires PRD) or #6 (testing checklist)
+- **Phase**: **Major UI Framework Migration**
+- **Status**: Planning complete (0% implementation)
+- **Goal**: Replace Material-UI with Tailwind CSS + Radix UI
+- **Reason**: Critical Windows rendering issues make app completely unusable
+- **Next Steps**:
+  1. ✅ Project plan created (docs/PROJECT_PLAN_UI_REFACTOR.md)
+  2. ✅ PRD created (docs/prds/ui-refactor-mui-to-tailwind.md)
+  3. ✅ Task list created (docs/tasks/ui-refactor-mui-to-tailwind.md)
+  4. ✅ Refactor branch created and pushed
+  5. ⏭️ Begin Phase 1: Setup & Foundation (install Tailwind, Radix UI, create base components)
 
 ---
 
 ## Recent Changes
+
+### 2025-11-22: Plan Comprehensive UI Framework Migration ✅
+- ✅ **Critical Issue Identified**: Windows UI completely unusable (huge icons, no scroll bars, blank areas)
+- ✅ **Root Cause**: Material-UI incompatibility with desktop environments and Windows DPI scaling
+- ✅ **Decision**: Replace MUI with Tailwind CSS + Radix UI (incremental page-by-page migration)
+- ✅ **Planning Documentation Created**:
+  - `docs/PROJECT_PLAN_UI_REFACTOR.md` - Master plan with 4 phases
+  - `docs/prds/ui-refactor-mui-to-tailwind.md` - Comprehensive PRD with technical architecture
+  - `docs/tasks/ui-refactor-mui-to-tailwind.md` - 12 phases, 150+ actionable tasks
+  - `docs/prds/fix-ui-rendering-issues.md` - Documents attempted fixes
+  - `docs/tasks/fix-ui-rendering-issues.md` - Task tracking for fix attempts
+- ✅ **Branch Created**: `feature/ui-refactor-tailwind` off `dev`
+- ✅ **Scope**: Replace all UI components while keeping 100% of Rust backend unchanged
+- ✅ **Timeline**: 10-12 days full-time or 3-4 weeks part-time
+- ✅ **Success Metrics**: >30% bundle size reduction, proper Windows rendering, all 6 pages working
+
+**Attempted Fixes** (did not resolve root issue):
+- Windows DPI configuration in tauri.conf.json
+- Scroll container fixes in DashboardEntryLayout.tsx
+- Enhanced error logging in commands.rs
+- Fixed missing `rand::RngCore` import in crypto.rs
+- Build configuration cleanup
+
+**Next Phase**: Begin implementation - Phase 1: Setup & Foundation
+
+**Commit**: 5f48c08
+**Branch**: `feature/ui-refactor-tailwind`
 
 ### 2025-11-22: Document Missing Migration #21 - Issue #3 Complete ✅
 - ✅ **Documentation**: Added comment explaining migration file/version numbering gap
@@ -102,7 +137,11 @@
 ## Tech Stack
 
 - **Frontend**: React 19 + TypeScript + Vite
-- **Backend**: Tauri 2 + Rust
+- **UI Framework**: 🔄 **In Transition**
+  - **Current**: Material-UI (MUI) + Emotion - ❌ **Being Removed**
+  - **Target**: Tailwind CSS + Radix UI - ⏭️ **Being Implemented**
+  - **Icons**: lucide-react (replacing @mui/icons-material)
+- **Backend**: Tauri 2 + Rust (no changes)
 - **Database**: SQLite (via tauri-plugin-sql)
 - **State Management**: Zustand + Immer
 - **AI**: Whisper (local/API), Groq LLM
@@ -112,13 +151,20 @@
 
 ## Open Issues
 
+### Critical (Blocking Release)
+- **UI Framework Migration**: Replace MUI with Tailwind + Radix UI (in progress on `feature/ui-refactor-tailwind`)
+  - **Status**: Planning complete, implementation not started
+  - **Reason**: Windows UI completely unusable (huge icons, no scroll, blank areas)
+  - **Tracking**: See `docs/tasks/ui-refactor-mui-to-tailwind.md`
+
+### Pre-Deployment (On Hold - After UI Refactor)
 See GitHub Issues:
-1. #1 - Fix npm glob vulnerability
-2. #2 - Fix Windows build failure
-3. #3 - Document missing migration #21
-4. #4 - Create .env.example
-5. #5 - Clean up console.log statements
-6. #6 - Pre-deployment testing checklist
+1. ✅ #1 - Fix npm glob vulnerability (COMPLETE)
+2. ✅ #2 - Fix Windows build failure (COMPLETE)
+3. ✅ #3 - Document missing migration #21 (COMPLETE)
+4. ✅ #4 - Create .env.example (COMPLETE)
+5. ⏸️ #5 - Clean up console.log statements (deferred until after UI refactor)
+6. ⏸️ #6 - Pre-deployment testing checklist (deferred until after UI refactor)
 
 ---
 
@@ -126,4 +172,6 @@ See GitHub Issues:
 
 - **Date**: 2025-11-22
 - **By**: Claude Code
-- **Context**: Completed security audit and setup documentation workflow
+- **Context**: Comprehensive UI refactor planning complete - Ready to begin implementation
+- **Branch**: `feature/ui-refactor-tailwind`
+- **Next Action**: Phase 1 - Install Tailwind CSS, Radix UI, and create base component library

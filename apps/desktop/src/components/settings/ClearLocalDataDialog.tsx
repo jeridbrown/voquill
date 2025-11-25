@@ -1,19 +1,18 @@
 import { invoke } from "@tauri-apps/api/core";
-import {
-  Alert,
-  AlertTitle,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { produceAppState, useAppStore } from "../../store";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 const CONFIRMATION_PHRASE = "clear";
 
@@ -57,71 +56,71 @@ export const ClearLocalDataDialog = () => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>
-        <FormattedMessage defaultMessage="Clear local data" />
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={2} sx={{ mt: 1 }}>
-          <Alert severity="warning" variant="outlined">
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => !isOpen && handleClose()}
+    >
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>
+            <FormattedMessage defaultMessage="Clear local data" />
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 mt-4">
+          <Alert variant="warning">
             <AlertTitle>
               <FormattedMessage defaultMessage="This action permanently removes local data" />
             </AlertTitle>
-            <Typography variant="body2">
+            <AlertDescription>
               <FormattedMessage defaultMessage="This will delete all preferences, dictionary entries, and saved transcriptions from this device. The action cannot be undone." />
-            </Typography>
+            </AlertDescription>
           </Alert>
-          <Typography variant="body2">
+          <p className="text-sm">
             <FormattedMessage
               defaultMessage="To confirm, type {phrase} below and click Clear local data."
               values={{
-                phrase: (
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    fontWeight="bold"
-                    sx={{ fontFamily: "inherit" }}
-                  >
-                    {CONFIRMATION_PHRASE}
-                  </Typography>
-                ),
+                phrase: <span className="font-bold">{CONFIRMATION_PHRASE}</span>,
               }}
             />
-          </Typography>
-          <TextField
-            autoFocus
-            fullWidth
-            label={<FormattedMessage defaultMessage="Confirmation phrase" />}
-            value={confirmationValue}
-            onChange={(event) => setConfirmationValue(event.target.value)}
-            disabled={isClearing}
-            placeholder={CONFIRMATION_PHRASE}
-            autoComplete="off"
-          />
+          </p>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="confirmation">
+              <FormattedMessage defaultMessage="Confirmation phrase" />
+            </Label>
+            <Input
+              id="confirmation"
+              autoFocus
+              value={confirmationValue}
+              onChange={(event) => setConfirmationValue(event.target.value)}
+              disabled={isClearing}
+              placeholder={CONFIRMATION_PHRASE}
+              autoComplete="off"
+            />
+          </div>
           {errorMessage && (
-            <Alert severity="error" variant="outlined">
-              {errorMessage}
+            <Alert variant="error">
+              <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
-        </Stack>
+        </div>
+        <DialogFooter>
+          <Button onClick={handleClose} disabled={isClearing} variant="outline">
+            <FormattedMessage defaultMessage="Cancel" />
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={handleClear}
+            disabled={!confirmationMatches || isClearing}
+            loading={isClearing}
+          >
+            {isClearing ? (
+              <FormattedMessage defaultMessage="Clearing..." />
+            ) : (
+              <FormattedMessage defaultMessage="Clear local data" />
+            )}
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} disabled={isClearing}>
-          <FormattedMessage defaultMessage="Cancel" />
-        </Button>
-        <Button
-          color="error"
-          variant="contained"
-          onClick={handleClear}
-          disabled={!confirmationMatches || isClearing}
-        >
-          {isClearing ? (
-            <FormattedMessage defaultMessage="Clearing..." />
-          ) : (
-            <FormattedMessage defaultMessage="Clear local data" />
-          )}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

@@ -1,22 +1,22 @@
-import { CircularProgress, type SxProps } from "@mui/material";
+import { CircularProgress } from "../ui/progress";
+import { cn } from "../ui/utils/cn";
 
 export type AppCircularProgressProps = {
-	size?: number;
-	value?: number;
-	sx?: SxProps;
+  size?: number;
+  value?: number;
+  className?: string;
 };
 
 export const AppCircularProgress = ({
-	size,
-	value,
-	sx,
+  size,
+  value,
+  className,
 }: AppCircularProgressProps) => {
-	return (
-		<CircularProgress
-			size={size}
-			value={value}
-			sx={sx}
-			variant={value ? "determinate" : "indeterminate"}
-		/>
-	);
+  return (
+    <CircularProgress
+      size={size}
+      value={value}
+      className={cn(className)}
+    />
+  );
 };

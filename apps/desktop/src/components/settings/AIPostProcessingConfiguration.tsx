@@ -1,4 +1,3 @@
-import { Stack, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { FormattedMessage } from "react-intl";
 import {
@@ -38,7 +37,7 @@ export const AIPostProcessingConfiguration = ({
   }, []);
 
   return (
-    <Stack spacing={3} alignItems="flex-start" sx={{ width: "100%" }}>
+    <div className="flex flex-col gap-6 items-start w-full">
       <SegmentedControl<PostProcessingMode>
         value={postProcessing.mode}
         onChange={handleModeChange}
@@ -59,9 +58,9 @@ export const AIPostProcessingConfiguration = ({
       />
 
       {postProcessing.mode === "none" && (
-        <Typography variant="body2" color="text.secondary">
+        <p className="text-sm text-muted-foreground">
           <FormattedMessage defaultMessage="No AI post-processing will run on new transcripts." />
-        </Typography>
+        </p>
       )}
 
       {postProcessing.mode === "api" && (
@@ -72,6 +71,6 @@ export const AIPostProcessingConfiguration = ({
       )}
 
       {postProcessing.mode === "cloud" && <VoquillCloudSetting />}
-    </Stack>
+    </div>
   );
 };

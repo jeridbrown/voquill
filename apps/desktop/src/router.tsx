@@ -1,7 +1,7 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import SettingsPage from "./components/settings/SettingsPage.tsx";
-import { PageLayout } from "./components/common/PageLayout.tsx";
-import HomePage from "./components/home/HomePage.tsx";
+import SettingsPage from "./components/settings/SettingsPageNew.tsx";
+import { PageLayout } from "./components/common/PageLayoutNew.tsx";
+import HomePage from "./components/home/HomePageNew.tsx";
 import OnboardingPage from "./components/onboarding/OnboardingPage.tsx";
 import ErrorBoundary from "./components/root/ErrorBoundary.tsx";
 import { AppHeader } from "./components/root/Header.tsx";
@@ -9,9 +9,9 @@ import Root from "./components/root/Root.tsx";
 import { Guard } from "./components/routing/Guard.tsx";
 import { Redirect } from "./components/routing/Redirectors.tsx";
 import DashboardPage from "./components/dashboard/DashboardPage.tsx";
-import TranscriptionsPage from "./components/transcriptions/TranscriptionsPage.tsx";
-import DictionaryPage from "./components/dictionary/DictionaryPage.tsx";
-import StylingPage from "./components/styling/StylingPage.tsx";
+import TranscriptionsPage from "./components/transcriptions/TranscriptionsPageNew.tsx";
+import DictionaryPage from "./components/dictionary/DictionaryPageNew.tsx";
+import StylingPage from "./components/styling/StylingPageNew.tsx";
 
 const AppWrapper = () => {
   return (

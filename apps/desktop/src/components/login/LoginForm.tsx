@@ -1,7 +1,5 @@
-import { Collapse, Stack, Typography } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { useSearchParams } from "react-router-dom";
-import { TransitionGroup } from "react-transition-group";
 import { useOnExit } from "../../hooks/helper.hooks";
 import { useConsumeQueryParams } from "../../hooks/navigation.hooks";
 import { INITIAL_LOGIN_STATE, LoginMode } from "../../state/login.state";
@@ -44,64 +42,37 @@ export const LoginForm = () => {
   });
 
   return (
-    <Stack spacing={1.5}>
-      <Typography variant="body1" fontWeight="bold">
+    <div className="flex flex-col gap-3">
+      <p className="text-base font-bold">
         {mode === "signIn" && <FormattedMessage defaultMessage="Sign in" />}
         {mode === "signUp" && <FormattedMessage defaultMessage="Sign up" />}
-        {mode === "resetPassword" && <FormattedMessage defaultMessage="Reset password" />}
-        {mode === "passwordResetSent" && <FormattedMessage defaultMessage="Email sent" />}
-      </Typography>
-
-      <TransitionGroup>
-        {mode === "signIn" && (
-          <Collapse key="signIn" timeout={400} unmountOnExit>
-            <SignInForm />
-          </Collapse>
-        )}
-        {mode === "signUp" && (
-          <Collapse key="signUp" timeout={400} unmountOnExit>
-            <SignUpForm />
-          </Collapse>
-        )}
         {mode === "resetPassword" && (
-          <Collapse key="resetPassword" timeout={400} unmountOnExit>
-            <ResetPasswordForm />
-          </Collapse>
+          <FormattedMessage defaultMessage="Reset password" />
         )}
         {mode === "passwordResetSent" && (
-          <Collapse key="passwordResetSent" timeout={400} unmountOnExit>
-            <ResetSentForm />
-          </Collapse>
+          <FormattedMessage defaultMessage="Email sent" />
         )}
-      </TransitionGroup>
+      </p>
 
-      <Typography
-        variant="body2"
-        color="textSecondary"
-        textAlign="center"
-        sx={{ maxWidth: 300, alignSelf: "center", fontSize: "0.75rem" }}
-      >
+      {mode === "signIn" && <SignInForm />}
+      {mode === "signUp" && <SignUpForm />}
+      {mode === "resetPassword" && <ResetPasswordForm />}
+      {mode === "passwordResetSent" && <ResetSentForm />}
+
+      <p className="text-xs text-muted-foreground text-center max-w-[300px] self-center">
         <FormattedMessage defaultMessage="By using this service, you agree to our" />{" "}
-        <a
-          href="/terms"
-          style={{ color: "inherit", textDecoration: "underline" }}
-        >
+        <a href="/terms" className="underline hover:text-foreground">
           <FormattedMessage defaultMessage="Terms & Conditions" />
         </a>{" "}
         <FormattedMessage defaultMessage="and" />{" "}
-        <a
-          href="/privacy"
-          style={{ color: "inherit", textDecoration: "underline" }}
-        >
+        <a href="/privacy" className="underline hover:text-foreground">
           <FormattedMessage defaultMessage="Privacy Policy" />
         </a>
-      </Typography>
+      </p>
 
       {errorMessage && (
-        <Typography color="error" textAlign="center">
-          {errorMessage}
-        </Typography>
+        <p className="text-destructive text-center">{errorMessage}</p>
       )}
-    </Stack>
+    </div>
   );
 };

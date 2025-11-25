@@ -1,12 +1,6 @@
-import { Check } from "@mui/icons-material";
-import {
-  Step,
-  StepLabel,
-  Stepper,
-  useTheme,
-  type SxProps,
-} from "@mui/material";
+import { Check } from "lucide-react";
 import { isDefined } from "@repo/utilities";
+import { cn } from "../ui/utils/cn";
 
 export type AppStepperStep = {
   label: string;
@@ -16,7 +10,7 @@ export type AppStepperStep = {
 export type AppStepperProps = {
   index?: number;
   steps?: AppStepperStep[];
-  sx?: SxProps;
+  className?: string;
   readyIndex?: number;
   onStepClick?: (stepIndex: number) => void;
 };
@@ -24,82 +18,49 @@ export type AppStepperProps = {
 export const AppStepper = ({
   index = 0,
   steps = [],
-  sx,
+  className,
   readyIndex,
   onStepClick,
 }: AppStepperProps) => {
-  const theme = useTheme();
-
-  const pill = {
-    backgroundColor: "primary.main",
-    px: 3,
-    py: 1.5,
-  };
-
-  const transition = theme.transitions.create(
-    ["background-color", "padding", "font-size", "color", "transform"],
-    { duration: theme.transitions.duration.short }
-  );
-
   return (
-    <Stepper activeStep={index} orientation="vertical" sx={sx}>
+    <div className={cn("flex flex-col gap-1", className)}>
       {steps.map((step, idx) => {
         const completed = idx < index;
         const active = idx === index;
         const clickable =
           onStepClick && (isDefined(readyIndex) ? idx <= readyIndex : true);
-        const icon = completed ? <Check /> : step.icon;
+        const icon = completed ? <Check className="h-5 w-5" /> : step.icon;
 
         return (
-          <Step key={step.label} completed={completed}>
-            <StepLabel
-              icon={icon}
-              sx={{
-                borderRadius: "64px",
-                display: "flex",
-                alignItems: "center",
-                opacity: clickable ? 1 : 0.2,
-                transition,
-                "& .MuiStepLabel-label": {
-                  fontSize: 16,
-                  transition,
-                },
-                "& .MuiStepLabel-iconContainer": {
-                  mr: 2,
-                  transition,
-                  "& svg": {
-                    fontSize: 22,
-                    transition,
-                  },
-                },
-                ...(active && {
-                  ...pill,
-                  "& .MuiStepLabel-label": {
-                    fontSize: 18,
-                    fontWeight: 600,
-                    color: `${theme.vars?.palette?.primary.contrastText} !important`,
-                    ml: -1,
-                  },
-                  "& .MuiStepLabel-iconContainer svg": {
-                    fontSize: 26,
-                    color: theme.vars?.palette?.primary.contrastText,
-                    transform: "scale(1.1)",
-                  },
-                }),
-                ...(clickable && {
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                    cursor: "pointer",
-                  },
-                }),
-              }}
-              onClick={clickable ? () => onStepClick(idx) : undefined}
+          <div
+            key={step.label}
+            onClick={clickable ? () => onStepClick(idx) : undefined}
+            className={cn(
+              "flex items-center gap-4 py-3 px-4 rounded-full transition-all duration-200",
+              clickable && "cursor-pointer hover:scale-105",
+              !clickable && "opacity-20",
+              active && "bg-primary text-primary-foreground px-6 py-4"
+            )}
+          >
+            <span
+              className={cn(
+                "flex items-center justify-center transition-all duration-200",
+                active && "scale-110"
+              )}
+            >
+              {icon}
+            </span>
+            <span
+              className={cn(
+                "text-base transition-all duration-200",
+                active && "text-lg font-semibold -ml-1"
+              )}
             >
               {step.label}
-            </StepLabel>
-          </Step>
+            </span>
+          </div>
         );
       })}
-    </Stepper>
+    </div>
   );
 };
