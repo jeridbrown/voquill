@@ -1,23 +1,5 @@
-import AddIcon from "@mui/icons-material/Add";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Link,
-  MenuItem,
-  Paper,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { groqTestIntegration } from "@repo/voice-ai";
+import { Plus, Trash2, ExternalLink } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import {
@@ -26,12 +8,35 @@ import {
   loadApiKeys,
 } from "../../actions/api-key.actions";
 import { showErrorSnackbar, showSnackbar } from "../../actions/app.actions";
-import { useAppStore } from "../../store";
 import {
   SettingsApiKey,
   SettingsApiKeyProvider,
 } from "../../state/settings.state";
-import { groqTestIntegration } from "@repo/voice-ai";
+import { useAppStore } from "../../store";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { CircularProgress } from "../ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 type ApiKeyListProps = {
   selectedApiKeyId: string | null;
@@ -71,61 +76,63 @@ const AddApiKeyCard = ({ onSave, onCancel }: AddApiKeyCardProps) => {
   }, [name, key, provider, onSave, saving]);
 
   return (
-    <Paper
-      variant="outlined"
-      sx={{
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        gap: 1.5,
-      }}
-    >
-      <TextField
-        label={<FormattedMessage defaultMessage="Key name" />}
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-        placeholder="e.g., My Groq Key"
-        size="small"
-        fullWidth
-        disabled={saving}
-      />
-      <TextField
-        select
-        label={<FormattedMessage defaultMessage="Provider" />}
-        value={provider}
-        onChange={(event) =>
-          setProvider(event.target.value as SettingsApiKeyProvider)
-        }
-        size="small"
-        fullWidth
-        disabled={saving}
-      >
-        <MenuItem value="groq">Groq</MenuItem>
-      </TextField>
-      <TextField
-        label={<FormattedMessage defaultMessage="API key" />}
-        value={key}
-        onChange={(event) => setKey(event.target.value)}
-        placeholder="Paste your API key"
-        size="small"
-        fullWidth
-        type="password"
-        disabled={saving}
-      />
-      <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
-        <Button
-          variant="outlined"
-          onClick={onCancel}
-          size="small"
+    <div className="p-4 border border-border rounded-lg flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="key-name">
+          <FormattedMessage defaultMessage="Key name" />
+        </Label>
+        <Input
+          id="key-name"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          placeholder="e.g., My Groq Key"
+          inputSize="sm"
+          disabled={saving}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="provider">
+          <FormattedMessage defaultMessage="Provider" />
+        </Label>
+        <Select
+          value={provider}
+          onValueChange={(value) =>
+            setProvider(value as SettingsApiKeyProvider)
+          }
           disabled={saving}
         >
+          <SelectTrigger id="provider" className="h-9">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="groq">Groq</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="api-key">
+          <FormattedMessage defaultMessage="API key" />
+        </Label>
+        <Input
+          id="api-key"
+          value={key}
+          onChange={(event) => setKey(event.target.value)}
+          placeholder="Paste your API key"
+          inputSize="sm"
+          type="password"
+          disabled={saving}
+        />
+      </div>
+      <div className="flex gap-2 justify-end">
+        <Button variant="outline" onClick={onCancel} size="sm" disabled={saving}>
           <FormattedMessage defaultMessage="Cancel" />
         </Button>
         <Button
-          variant="contained"
-          size="small"
+          variant="primary"
+          size="sm"
           onClick={handleSave}
           disabled={!name || !key || saving}
+          loading={saving}
         >
           {saving ? (
             <FormattedMessage defaultMessage="Saving..." />
@@ -133,8 +140,8 @@ const AddApiKeyCard = ({ onSave, onCancel }: AddApiKeyCardProps) => {
             <FormattedMessage defaultMessage="Save" />
           )}
         </Button>
-      </Box>
-    </Paper>
+      </div>
+    </div>
   );
 };
 
@@ -168,53 +175,38 @@ const ApiKeyCard = ({
   onDelete: () => void;
   deleting: boolean;
 }) => (
-  <Paper
-    variant="outlined"
+  <div
     onClick={onSelect}
-    sx={{
-      p: 2,
-      borderColor: selected ? "primary.main" : "divider",
-      borderWidth: 1,
-      cursor: "pointer",
-      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-      boxShadow: selected
-        ? (theme) => `0 0 0 1px ${theme.palette.primary.main}`
-        : "none",
-      ":hover": {
-        borderColor: selected ? "primary.main" : "action.active",
-      },
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: 2,
-      width: "100%",
-    }}
+    className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center justify-between gap-4 w-full ${
+      selected
+        ? "border-primary ring-1 ring-primary"
+        : "border-border hover:border-muted-foreground"
+    }`}
   >
-    <Stack spacing={0.5} sx={{ flex: 1, minWidth: 0 }}>
-      <Typography variant="subtitle1" fontWeight={600}>
-        {apiKey.name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
+    <div className="flex flex-col gap-1 flex-1 min-w-0">
+      <p className="text-base font-semibold">{apiKey.name}</p>
+      <p className="text-sm text-muted-foreground">
         {apiKey.provider.toUpperCase()}
-      </Typography>
+      </p>
       {apiKey.keySuffix ? (
-        <Typography variant="caption" color="text.secondary">
+        <p className="text-xs text-muted-foreground">
           <FormattedMessage
             defaultMessage="Ends with {suffix}"
             values={{ suffix: apiKey.keySuffix }}
           />
-        </Typography>
+        </p>
       ) : null}
-    </Stack>
-    <Stack direction="row" spacing={1} alignItems="center">
+    </div>
+    <div className="flex flex-row gap-2 items-center">
       <Button
-        variant="outlined"
-        size="small"
+        variant="outline"
+        size="sm"
         onClick={(event) => {
           event.stopPropagation();
           onTest();
         }}
         disabled={testing || deleting}
+        loading={testing}
       >
         {testing ? (
           <FormattedMessage defaultMessage="Testing..." />
@@ -222,23 +214,29 @@ const ApiKeyCard = ({
           <FormattedMessage defaultMessage="Test" />
         )}
       </Button>
-      <Tooltip title={<FormattedMessage defaultMessage="Delete key" />}>
-        <span>
-          <IconButton
-            size="small"
-            color="error"
-            onClick={(event) => {
-              event.stopPropagation();
-              onDelete();
-            }}
-            disabled={deleting || testing}
-          >
-            <DeleteOutlineIcon fontSize="small" />
-          </IconButton>
-        </span>
-      </Tooltip>
-    </Stack>
-  </Paper>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDelete();
+              }}
+              disabled={deleting || testing}
+              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <FormattedMessage defaultMessage="Delete key" />
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+  </div>
 );
 
 const generateApiKeyId = () =>
@@ -336,44 +334,45 @@ export const ApiKeyList = ({ selectedApiKeyId, onChange }: ApiKeyListProps) => {
   }, []);
 
   const loadingState = (
-    <Stack spacing={1} alignItems="center">
+    <div className="flex flex-col gap-2 items-center">
       <CircularProgress size={24} />
-      <Typography variant="body2" color="text.secondary">
+      <p className="text-sm text-muted-foreground">
         <FormattedMessage defaultMessage="Loading API keys…" />
-      </Typography>
-    </Stack>
+      </p>
+    </div>
   );
 
   const errorState = (
-    <Stack spacing={1.5} alignItems="flex-start">
-      <Typography variant="subtitle1" fontWeight={600}>
+    <div className="flex flex-col gap-3 items-start">
+      <p className="text-base font-semibold">
         <FormattedMessage defaultMessage="Failed to load API keys" />
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
+      </p>
+      <p className="text-sm text-muted-foreground">
         <FormattedMessage defaultMessage="We couldn't load your saved API keys. Please try again." />
-      </Typography>
-      <Button variant="outlined" onClick={handleRetryLoad}>
+      </p>
+      <Button variant="outline" onClick={handleRetryLoad}>
         <FormattedMessage defaultMessage="Retry" />
       </Button>
-    </Stack>
+    </div>
   );
 
   const emptyState = (
-    <Stack spacing={1.5} alignItems="flex-start">
-      <Typography variant="subtitle1" fontWeight={600}>
+    <div className="flex flex-col gap-3 items-start">
+      <p className="text-base font-semibold">
         <FormattedMessage defaultMessage="No API keys yet" />
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
+      </p>
+      <p className="text-sm text-muted-foreground">
         <FormattedMessage defaultMessage="Connect a transcription provider like Groq with your API key." />
-      </Typography>
+      </p>
       <Button
-        variant="contained"
-        startIcon={<AddIcon />}
+        variant="primary"
         onClick={() => setShowAddCard(true)}
+        icon={<Plus className="h-4 w-4" />}
+        iconPosition="left"
       >
         <FormattedMessage defaultMessage="Add API key" />
       </Button>
-    </Stack>
+    </div>
   );
 
   const shouldShowLoading = status === "loading" && apiKeys.length === 0;
@@ -385,25 +384,21 @@ export const ApiKeyList = ({ selectedApiKeyId, onChange }: ApiKeyListProps) => {
     !shouldShowError;
 
   return (
-    <Stack spacing={1} sx={{ width: "100%" }}>
-      <Stack direction="row" spacing={0.5} alignItems="center">
-        <Typography variant="body2" color="text.secondary">
+    <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-row gap-1 items-center">
+        <span className="text-sm text-muted-foreground">
           <FormattedMessage defaultMessage="Grab an API key from the" />
-        </Typography>
-        <Link
+        </span>
+        <a
           href="https://console.groq.com/"
           target="_blank"
           rel="noopener noreferrer"
-          sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 0.5,
-          }}
+          className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
         >
           <FormattedMessage defaultMessage="Groq Console" />
-          <OpenInNewIcon sx={{ fontSize: 16 }} />
-        </Link>
-      </Stack>
+          <ExternalLink className="h-4 w-4" />
+        </a>
+      </div>
       {shouldShowLoading ? (
         loadingState
       ) : shouldShowError ? (
@@ -411,7 +406,7 @@ export const ApiKeyList = ({ selectedApiKeyId, onChange }: ApiKeyListProps) => {
       ) : shouldShowEmpty ? (
         emptyState
       ) : (
-        <Stack spacing={1.5} alignItems="stretch" sx={{ width: "100%" }}>
+        <div className="flex flex-col gap-3 items-stretch w-full">
           {apiKeys.map((apiKey) => (
             <ApiKeyCard
               key={apiKey.id}
@@ -424,7 +419,7 @@ export const ApiKeyList = ({ selectedApiKeyId, onChange }: ApiKeyListProps) => {
               deleting={deletingApiKeyId === apiKey.id}
             />
           ))}
-        </Stack>
+        </div>
       )}
       {showAddCard ? (
         <AddApiKeyCard
@@ -433,61 +428,65 @@ export const ApiKeyList = ({ selectedApiKeyId, onChange }: ApiKeyListProps) => {
         />
       ) : apiKeys.length > 0 || shouldShowError ? (
         <Button
-          variant="outlined"
-          startIcon={<AddIcon />}
+          variant="outline"
           onClick={() => setShowAddCard(true)}
-          sx={{ alignSelf: "flex-start" }}
+          icon={<Plus className="h-4 w-4" />}
+          iconPosition="left"
+          className="self-start"
         >
           <FormattedMessage defaultMessage="Add another key" />
         </Button>
       ) : null}
       <Dialog
         open={apiKeyToDelete !== null}
-        onClose={handleCloseDeleteDialog}
-        maxWidth="xs"
-        fullWidth
+        onOpenChange={(isOpen) => !isOpen && handleCloseDeleteDialog()}
       >
-        <DialogTitle>
-          <FormattedMessage defaultMessage="Delete API key" />
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">
-            <FormattedMessage
-              defaultMessage="Are you sure you want to delete the API key {keyName}?"
-              values={{
-                keyName: (
-                  <Box component="span" fontWeight={600}>
-                    {apiKeyToDelete?.name ?? "this API key"}
-                  </Box>
-                ),
-              }}
-            />
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            <FormattedMessage defaultMessage="Removing the key signs you out of that provider on this device." />
-          </Typography>
+        <DialogContent className="max-w-xs">
+          <DialogHeader>
+            <DialogTitle>
+              <FormattedMessage defaultMessage="Delete API key" />
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-2 mt-4">
+            <p className="text-sm">
+              <FormattedMessage
+                defaultMessage="Are you sure you want to delete the API key {keyName}?"
+                values={{
+                  keyName: (
+                    <span className="font-semibold">
+                      {apiKeyToDelete?.name ?? "this API key"}
+                    </span>
+                  ),
+                }}
+              />
+            </p>
+            <p className="text-sm text-muted-foreground">
+              <FormattedMessage defaultMessage="Removing the key signs you out of that provider on this device." />
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={handleCloseDeleteDialog}
+              disabled={deletingApiKeyId !== null}
+            >
+              <FormattedMessage defaultMessage="Cancel" />
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={deletingApiKeyId !== null}
+              loading={deletingApiKeyId !== null}
+            >
+              {deletingApiKeyId !== null ? (
+                <FormattedMessage defaultMessage="Deleting..." />
+              ) : (
+                <FormattedMessage defaultMessage="Delete" />
+              )}
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleCloseDeleteDialog}
-            disabled={deletingApiKeyId !== null}
-          >
-            <FormattedMessage defaultMessage="Cancel" />
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleConfirmDelete}
-            disabled={deletingApiKeyId !== null}
-          >
-            {deletingApiKeyId !== null ? (
-              <FormattedMessage defaultMessage="Deleting..." />
-            ) : (
-              <FormattedMessage defaultMessage="Delete" />
-            )}
-          </Button>
-        </DialogActions>
       </Dialog>
-    </Stack>
+    </div>
   );
 };
