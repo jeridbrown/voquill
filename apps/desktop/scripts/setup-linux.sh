@@ -84,15 +84,12 @@ install_gpu_prereqs() {
   if command_exists apt-get; then
     sudo apt-get install -y \
       libvulkan-dev \
-      vulkan-utils
+      vulkan-tools
     
-    # Install glslc from LunarG Vulkan SDK
+    # Install glslc shader compiler (available as 'glslc' on Ubuntu 24.04+)
     if ! command_exists glslc; then
-      echo "[INFO] Installing Vulkan SDK for glslc shader compiler..."
-      wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-      sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list https://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-      sudo apt-get update
-      sudo apt-get install -y vulkan-sdk
+      echo "[INFO] Installing glslc shader compiler..."
+      sudo apt-get install -y glslc
     fi
   elif command_exists pacman; then
     sudo pacman -Syu --needed \

@@ -6,7 +6,6 @@ pub struct Tone {
     pub id: String,
     pub name: String,
     pub prompt_template: String,
-    pub is_system: bool,
     pub created_at: i64,
     pub sort_order: i32,
 }

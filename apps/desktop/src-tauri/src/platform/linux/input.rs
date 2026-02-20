@@ -49,7 +49,7 @@ fn paste_via_clipboard(text: &str) -> Result<(), String> {
 
     if let Some(old) = previous {
         thread::spawn(move || {
-            thread::sleep(Duration::from_millis(800));
+            thread::sleep(Duration::from_millis(3000));
             if let Ok(mut clipboard) = arboard::Clipboard::new() {
                 let _ = clipboard.set_text(old);
             }

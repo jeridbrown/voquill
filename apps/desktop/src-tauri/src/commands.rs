@@ -521,7 +521,6 @@ pub async fn tone_upsert(
     {
         let updated = crate::domain::Tone {
             created_at: existing.created_at,
-            is_system: existing.is_system,
             ..tone.clone()
         };
 
