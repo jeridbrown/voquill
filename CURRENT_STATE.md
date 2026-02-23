@@ -7,26 +7,32 @@
 ## Active Work
 
 ### Current Branch
-- **Branch**: `feature/ui-refactor-tailwind`
-- **Status**: 🔄 Planning Complete - Ready to Begin Implementation
-- **Last Session**: Comprehensive UI refactor planning and documentation
-- **Base Branch**: `dev` (will merge back when complete)
+- **Branch**: `feat/tone-paste-shortcut`
+- **Status**: ✅ Implementation Complete - Ready for PR to `dev`
+- **Last Session**: Implemented tone paste shortcut feature
+- **Base Branch**: `dev`
 
 ### Current Focus
-- **Phase**: **Major UI Framework Migration**
-- **Status**: Planning complete (0% implementation)
-- **Goal**: Replace Material-UI with Tailwind CSS + Radix UI
-- **Reason**: Critical Windows rendering issues make app completely unusable
-- **Next Steps**:
-  1. ✅ Project plan created (docs/PROJECT_PLAN_UI_REFACTOR.md)
-  2. ✅ PRD created (docs/prds/ui-refactor-mui-to-tailwind.md)
-  3. ✅ Task list created (docs/tasks/ui-refactor-mui-to-tailwind.md)
-  4. ✅ Refactor branch created and pushed
-  5. ⏭️ Begin Phase 1: Setup & Foundation (install Tailwind, Radix UI, create base components)
+- **Phase**: **Tone Paste Shortcut**
+- **Status**: ✅ Complete
+- **Goal**: Allow per-tone paste shortcut configuration (Ctrl+V vs Ctrl+Shift+V) for terminal support
+- **PRD**: `docs/prds/tone-paste-shortcut.md`
+- **Tasks**: `docs/tasks/tone-paste-shortcut.md`
 
 ---
 
 ## Recent Changes
+
+### 2026-02-22: Tone Paste Shortcut ✅
+- ✅ Added `pasteShortcut: "ctrl+v" | "ctrl+shift+v"` field to `Tone` type
+- ✅ DB migration `026_tone_paste_shortcut.sql` — adds column with `DEFAULT 'ctrl+v'`
+- ✅ Updated Rust `Tone` struct, `tone_queries.rs` (INSERT/SELECT/UPDATE), and `paste` command
+- ✅ Linux and Windows `input.rs` now branch on shortcut to simulate Ctrl+Shift+V
+- ✅ macOS `input.rs` unchanged (ignores shortcut; uses CGEvent injection)
+- ✅ `ToneEditorDialog.tsx` — paste shortcut Select (hidden on macOS)
+- ✅ `RootSideEffects.ts` — reads active tone's shortcut, passes to `invoke("paste")`
+- ✅ `tone.repo.ts` — `LocalTone` type and conversion functions updated
+- **Branch**: `feat/tone-paste-shortcut`
 
 ### 2025-11-22: Plan Comprehensive UI Framework Migration ✅
 - ✅ **Critical Issue Identified**: Windows UI completely unusable (huge icons, no scroll bars, blank areas)

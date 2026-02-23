@@ -1,7 +1,7 @@
 use enigo::{Enigo, Key, KeyboardControllable};
 use std::{env, thread, time::Duration};
 
-pub(crate) fn paste_text_into_focused_field(text: &str) -> Result<(), String> {
+pub(crate) fn paste_text_into_focused_field(text: &str, shortcut: &str) -> Result<(), String> {
     let trimmed = text.trim();
     if trimmed.is_empty() {
         return Ok(());
@@ -14,7 +14,7 @@ pub(crate) fn paste_text_into_focused_field(text: &str) -> Result<(), String> {
         target.chars().count()
     );
 
-    paste_via_clipboard(target).or_else(|err| {
+    paste_via_clipboard(target, shortcut).or_else(|err| {
         eprintln!("Clipboard paste failed ({err}). Falling back to simulated typing.");
         let mut enigo = Enigo::new();
         enigo.key_up(Key::Shift);
@@ -26,7 +26,7 @@ pub(crate) fn paste_text_into_focused_field(text: &str) -> Result<(), String> {
     })
 }
 
-fn paste_via_clipboard(text: &str) -> Result<(), String> {
+fn paste_via_clipboard(text: &str, shortcut: &str) -> Result<(), String> {
     let mut clipboard =
         arboard::Clipboard::new().map_err(|err| format!("clipboard unavailable: {err}"))?;
     let previous = clipboard.get_text().ok();
@@ -41,11 +41,22 @@ fn paste_via_clipboard(text: &str) -> Result<(), String> {
     enigo.key_up(Key::Control);
     enigo.key_up(Key::Alt);
     thread::sleep(Duration::from_millis(30));
-    enigo.key_down(Key::Control);
-    enigo.key_down(Key::Layout('v'));
-    thread::sleep(Duration::from_millis(15));
-    enigo.key_up(Key::Layout('v'));
-    enigo.key_up(Key::Control);
+
+    if shortcut == "ctrl+shift+v" {
+        enigo.key_down(Key::Control);
+        enigo.key_down(Key::Shift);
+        enigo.key_down(Key::Layout('v'));
+        thread::sleep(Duration::from_millis(15));
+        enigo.key_up(Key::Layout('v'));
+        enigo.key_up(Key::Shift);
+        enigo.key_up(Key::Control);
+    } else {
+        enigo.key_down(Key::Control);
+        enigo.key_down(Key::Layout('v'));
+        thread::sleep(Duration::from_millis(15));
+        enigo.key_up(Key::Layout('v'));
+        enigo.key_up(Key::Control);
+    }
 
     if let Some(old) = previous {
         thread::spawn(move || {

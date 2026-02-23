@@ -323,7 +323,12 @@ export const RootSideEffects = () => {
         });
 
         try {
-          await invoke<void>("paste", { text: trimmedTranscript });
+          const state = getAppState();
+          const currentTarget = state.currentAppTargetId
+            ? state.appTargetById[state.currentAppTargetId]
+            : null;
+          const shortcut = currentTarget?.pasteShortcut ?? "ctrl+v";
+          await invoke<void>("paste", { text: trimmedTranscript, shortcut });
         } catch (error) {
           console.error("Failed to paste transcription", error);
           showErrorSnackbar("Unable to paste transcription.");

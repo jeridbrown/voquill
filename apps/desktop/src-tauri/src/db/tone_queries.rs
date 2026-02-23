@@ -4,13 +4,7 @@ use crate::domain::Tone;
 
 pub async fn insert_tone(pool: SqlitePool, tone: &Tone) -> Result<Tone, sqlx::Error> {
     sqlx::query(
-        "INSERT INTO tones (
-             id,
-             name,
-             prompt_template,
-             created_at,
-             sort_order
-         )
+        "INSERT INTO tones (id, name, prompt_template, created_at, sort_order)
          VALUES (?1, ?2, ?3, ?4, ?5)",
     )
     .bind(&tone.id)

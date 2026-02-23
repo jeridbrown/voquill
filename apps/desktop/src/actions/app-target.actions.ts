@@ -1,4 +1,4 @@
-import { AppTarget, Nullable } from "@repo/types";
+import { AppTarget, Nullable, PasteShortcut } from "@repo/types";
 import { getRec } from "@repo/utilities";
 import { invoke } from "@tauri-apps/api/core";
 import { getAppTargetRepo, getStorageRepo } from "../repos";
@@ -43,11 +43,38 @@ export const setAppTargetTone = async (
       name: existing.name,
       toneId,
       iconPath: existing.iconPath ?? null,
+      pasteShortcut: existing.pasteShortcut ?? "ctrl+v",
     });
   } catch (error) {
     console.error("Failed to update app target tone", error);
     showErrorSnackbar(
       error instanceof Error ? error.message : "Failed to update app target tone.",
+    );
+  }
+};
+
+export const setAppTargetPasteShortcut = async (
+  id: string,
+  pasteShortcut: PasteShortcut,
+): Promise<void> => {
+  const existing = getAppState().appTargetById[id];
+  if (!existing) {
+    showErrorSnackbar("App target is not registered.");
+    return;
+  }
+
+  try {
+    await upsertAppTarget({
+      id,
+      name: existing.name,
+      toneId: existing.toneId ?? null,
+      iconPath: existing.iconPath ?? null,
+      pasteShortcut,
+    });
+  } catch (error) {
+    console.error("Failed to update app target paste shortcut", error);
+    showErrorSnackbar(
+      error instanceof Error ? error.message : "Failed to update paste shortcut.",
     );
   }
 };
@@ -85,6 +112,7 @@ export const tryRegisterCurrentAppTarget = async (): Promise<Nullable<AppTarget>
         name: appName,
         toneId: existingApp?.toneId ?? null,
         iconPath: iconPath ?? existingApp?.iconPath ?? null,
+        pasteShortcut: existingApp?.pasteShortcut ?? "ctrl+v",
       };
       await upsertAppTarget(params);
     } catch (error) {
@@ -92,5 +120,9 @@ export const tryRegisterCurrentAppTarget = async (): Promise<Nullable<AppTarget>
     }
   }
 
+  produceAppState((draft) => {
+    draft.currentAppTargetId = appTargetId;
+  });
+
   return getRec(getAppState().appTargetById, appTargetId) ?? null;
-}
+};
