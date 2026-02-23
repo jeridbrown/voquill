@@ -39,6 +39,12 @@ pub struct AppTargetUpsertArgs {
     pub tone_id: Option<String>,
     #[serde(default)]
     pub icon_path: Option<String>,
+    #[serde(default = "default_paste_shortcut")]
+    pub paste_shortcut: String,
+}
+
+fn default_paste_shortcut() -> String {
+    "ctrl+v".to_string()
 }
 
 #[derive(serde::Deserialize)]
@@ -248,6 +254,7 @@ pub async fn app_target_upsert(
         &args.name,
         args.tone_id,
         args.icon_path,
+        &args.paste_shortcut,
     )
     .await
     .map_err(|err| err.to_string())
@@ -521,7 +528,6 @@ pub async fn tone_upsert(
     {
         let updated = crate::domain::Tone {
             created_at: existing.created_at,
-            is_system: existing.is_system,
             ..tone.clone()
         };
 
@@ -943,9 +949,9 @@ pub fn surface_main_window(app: AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub async fn paste(text: String) -> Result<(), String> {
+pub async fn paste(text: String, shortcut: String) -> Result<(), String> {
     let join_result =
-        tauri::async_runtime::spawn_blocking(move || platform_paste_text(&text)).await;
+        tauri::async_runtime::spawn_blocking(move || platform_paste_text(&text, &shortcut)).await;
 
     match join_result {
         Ok(result) => {

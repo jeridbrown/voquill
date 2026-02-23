@@ -1,7 +1,7 @@
 use core_graphics::event::CGEventTapLocation;
 use core_graphics::event_source::{CGEventSource, CGEventSourceStateID};
 
-pub(crate) fn paste_text_into_focused_field(text: &str) -> Result<(), String> {
+pub(crate) fn paste_text_into_focused_field(text: &str, _shortcut: &str) -> Result<(), String> {
     if text.trim().is_empty() {
         return Ok(());
     }
