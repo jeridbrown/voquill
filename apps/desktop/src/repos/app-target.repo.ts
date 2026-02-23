@@ -1,4 +1,4 @@
-import { AppTarget } from "@repo/types";
+import { AppTarget, PasteShortcut } from "@repo/types";
 import { invoke } from "@tauri-apps/api/core";
 import { BaseRepo } from "./base.repo";
 
@@ -7,6 +7,7 @@ export type AppTargetUpsertParams = {
   name: string;
   toneId: string | null;
   iconPath: string | null;
+  pasteShortcut: PasteShortcut;
 };
 
 export abstract class BaseAppTargetRepo extends BaseRepo {

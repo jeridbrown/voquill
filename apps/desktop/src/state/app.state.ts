@@ -44,6 +44,7 @@ export type AppState = {
   userPreferencesById: Record<string, UserPreferences>;
   termById: Record<string, Term>;
   appTargetById: Record<string, AppTarget>;
+  currentAppTargetId: Nullable<string>;
   transcriptionById: Record<string, Transcription>;
   hotkeyById: Record<string, Hotkey>;
   apiKeyById: Record<string, ApiKey>;
@@ -76,6 +77,7 @@ export const INITIAL_APP_STATE: AppState = {
   userPreferencesById: {},
   termById: {},
   appTargetById: {},
+  currentAppTargetId: null,
   transcriptionById: {},
   priceValueByKey: {},
   apiKeyById: {},

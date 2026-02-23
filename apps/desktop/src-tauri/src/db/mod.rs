@@ -50,6 +50,8 @@ pub const CLEANUP_DEFAULT_TONES_MIGRATION_SQL: &str =
     include_str!("migrations/024_cleanup_default_tones.sql");
 pub const USER_PREFERRED_THEME_MIGRATION_SQL: &str =
     include_str!("migrations/025_user_preferred_theme.sql");
+pub const TONE_PASTE_SHORTCUT_MIGRATION_SQL: &str =
+    include_str!("migrations/026_tone_paste_shortcut.sql");
 
 pub fn migrations() -> Vec<tauri_plugin_sql::Migration> {
     vec![
@@ -205,6 +207,12 @@ pub fn migrations() -> Vec<tauri_plugin_sql::Migration> {
             version: 25,
             description: "add_user_preferred_theme",
             sql: USER_PREFERRED_THEME_MIGRATION_SQL,
+            kind: tauri_plugin_sql::MigrationKind::Up,
+        },
+        tauri_plugin_sql::Migration {
+            version: 26,
+            description: "add_tone_paste_shortcut",
+            sql: TONE_PASTE_SHORTCUT_MIGRATION_SQL,
             kind: tauri_plugin_sql::MigrationKind::Up,
         },
     ]
